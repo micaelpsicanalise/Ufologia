@@ -23,6 +23,9 @@
 }
 
 *{box-sizing:border-box;}
+
+[hidden]{display:none !important;}
+
 body.admin-body{
   margin:0;
   background:var(--bg-0);
@@ -270,7 +273,6 @@ table.admin-table tr:hover{background:var(--bg-2);}
   overflow-y:auto;
   z-index:60;
 }
-.admin-modal-backdrop[hidden]{display:none;}
 .admin-modal{
   background:var(--bg-1);
   border:1px solid var(--line);
