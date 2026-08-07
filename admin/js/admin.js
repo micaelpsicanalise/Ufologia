@@ -9,8 +9,8 @@
 // manualmente se você tiver mais de um lugar usando o mesmo projeto.
 // ===================================================================
 
-const SUPABASE_URL = 'https://SEU-PROJETO.supabase.co';
-const SUPABASE_ANON_KEY = 'SUA_ANON_KEY';
+const SUPABASE_URL = 'https://aewcxqzpbipwcdpsjfht.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_mINpOQLVbi0pilHc9bEtBA_l1a0o6c6';
 
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
   db: { schema: 'ufologia' }
