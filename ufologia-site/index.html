@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARQUIVO X-BR — Registro Ufológico Não Oficial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-0:#080b0f;
+    --bg-1:#0d1218;
+    --bg-2:#121820;
+    --line:#233040;
+    --line-soft:#1a232d;
+    --phosphor:#4fe3a8;
+    --phosphor-dim:#2c8a67;
+    --amber:#e2a23b;
+    --redact:#0a0a0a;
+    --stamp:#c1443a;
+    --text:#d6e2df;
+    --text-dim:#8296a0;
+    --text-faint:#4c5a63;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg-0);
+    color:var(--text);
+    font-family:'IBM Plex Mono', monospace;
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  ::selection{background:var(--phosphor); color:#04120b;}
+
+  /* scanline + noise overlay */
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    background:repeating-linear-gradient(
+      to bottom,
+      rgba(255,255,255,0.018) 0px,
+      rgba(255,255,255,0.018) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+    pointer-events:none;
+    z-index:9999;
+    mix-blend-mode:overlay;
+  }
+  body::after{
+    content:"";
+    position:fixed; inset:0;
+    background:radial-gradient(ellipse at 50% 0%, rgba(79,227,168,0.05), transparent 60%);
+    pointer-events:none;
+    z-index:1;
+  }
+
+  .wrap{max-width:1080px; margin:0 auto; padding:0 28px; position:relative; z-index:2;}
+
+  /* ---------- TOP BAR ---------- */
+  header.topbar{
+    position:sticky; top:0; z-index:100;
+    background:rgba(8,11,15,0.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+  .topbar-inner{
+    max-width:1080px; margin:0 auto; padding:14px 28px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .brand{
+    font-family:'Oswald', sans-serif;
+    font-weight:700;
+    letter-spacing:0.14em;
+    font-size:15px;
+    color:var(--phosphor);
+    display:flex; align-items:center; gap:10px;
+  }
+  .brand .dot{
+    width:7px; height:7px; border-radius:50%;
+    background:var(--stamp);
+    box-shadow:0 0 8px var(--stamp);
+    animation:blink 2.4s infinite;
+  }
+  @keyframes blink{0%,100%{opacity:1;}50%{opacity:0.25;}}
+  nav.toplinks{display:flex; gap:26px; font-size:11px; letter-spacing:0.08em; color:var(--text-dim);}
+  nav.toplinks a{color:var(--text-dim); text-decoration:none; text-transform:uppercase;}
+  nav.toplinks a:hover{color:var(--phosphor);}
+  @media (max-width:720px){nav.toplinks{display:none;}}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    padding:90px 0 70px;
+    border-bottom:1px solid var(--line-soft);
+    overflow:hidden;
+  }
+  .radar{
+    position:absolute;
+    top:50%; right:-120px; transform:translateY(-50%);
+    width:520px; height:520px;
+    border-radius:50%;
+    border:1px solid var(--line-soft);
+    opacity:0.7;
+  }
+  .radar::before, .radar::after{
+    content:""; position:absolute; inset:60px;
+    border-radius:50%; border:1px solid var(--line-soft);
+  }
+  .radar::after{inset:160px;}
+  .radar-sweep{
+    position:absolute; inset:0;
+    border-radius:50%;
+    background:conic-gradient(from 0deg, rgba(79,227,168,0.35), transparent 40deg);
+    animation:spin 5s linear infinite;
+  }
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .blip{
+    position:absolute; width:5px; height:5px; border-radius:50%;
+    background:var(--phosphor); box-shadow:0 0 10px var(--phosphor);
+    animation:fade 3.2s infinite;
+  }
+  @keyframes fade{0%,100%{opacity:0;}15%,60%{opacity:1;}}
+  @media (max-width:900px){.radar{display:none;}}
+
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:11px; letter-spacing:0.16em; text-transform:uppercase;
+    color:var(--amber); border:1px solid var(--amber); border-color:rgba(226,162,59,0.4);
+    padding:5px 12px; margin-bottom:26px;
+  }
+  h1.title{
+    font-family:'Oswald', sans-serif;
+    font-weight:700;
+    font-size:clamp(38px, 6vw, 68px);
+    line-height:1.02;
+    text-transform:uppercase;
+    letter-spacing:0.01em;
+    color:#eef4f2;
+    max-width:780px;
+  }
+  h1.title span{color:var(--phosphor);}
+  .hero p.sub{
+    margin-top:22px;
+    max-width:560px;
+    color:var(--text-dim);
+    font-size:15px;
+    font-family:'IBM Plex Mono', monospace;
+  }
+  .hero-meta{
+    margin-top:38px;
+    display:flex; gap:34px; flex-wrap:wrap;
+    font-size:11px; color:var(--text-faint); letter-spacing:0.06em; text-transform:uppercase;
+  }
+  .hero-meta b{color:var(--text-dim); display:block; font-size:20px; font-family:'Oswald',sans-serif; letter-spacing:0; text-transform:none; margin-bottom:2px;}
+
+  /* ---------- SECTION LABELS ---------- */
+  .section{padding:80px 0;}
+  .section-head{margin-bottom:44px;}
+  .section-tag{
+    font-size:11px; letter-spacing:0.18em; text-transform:uppercase;
+    color:var(--phosphor-dim); margin-bottom:10px; display:block;
+  }
+  h2.section-title{
+    font-family:'Oswald', sans-serif; font-weight:600;
+    font-size:clamp(26px,3.4vw,36px);
+    text-transform:uppercase;
+    color:#eef4f2;
+  }
+  .section-desc{color:var(--text-dim); max-width:600px; margin-top:12px; font-size:14px;}
+
+  /* ---------- ENTITY GRID ---------- */
+  .entities{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));
+    gap:20px;
+  }
+  .card{
+    background:var(--bg-1);
+    border:1px solid var(--line);
+    position:relative;
+    padding:22px 22px 20px;
+    transition:border-color 0.25s ease, transform 0.25s ease;
+  }
+  .card:hover{border-color:var(--phosphor-dim); transform:translateY(-3px);}
+  .card::before{
+    content:"CASO Nº " attr(data-case);
+    position:absolute; top:14px; right:16px;
+    font-size:10px; color:var(--text-faint); letter-spacing:0.08em;
+  }
+  .card-head{display:flex; align-items:baseline; gap:10px; margin-bottom:6px;}
+  .card h3{
+    font-family:'Oswald', sans-serif; font-weight:600;
+    font-size:19px; text-transform:uppercase; color:#eef4f2;
+  }
+  .card .also{font-size:11px; color:var(--text-faint); margin-bottom:14px; font-style:italic;}
+  .card p.desc{font-size:13px; color:var(--text-dim); margin-bottom:16px;}
+  .card .stats{display:flex; flex-direction:column; gap:7px; margin-bottom:16px;}
+  .stat-row{display:flex; justify-content:space-between; font-size:11px; border-bottom:1px dashed var(--line-soft); padding-bottom:6px;}
+  .stat-row span:first-child{color:var(--text-faint); text-transform:uppercase; letter-spacing:0.05em;}
+  .stat-row span:last-child{color:var(--text);}
+  .threat{display:flex; gap:3px; margin-top:16px;}
+  .threat i{width:16px; height:5px; background:var(--line);}
+  .threat i.on{background:var(--stamp);}
+  .threat-label{font-size:10px; color:var(--text-faint); text-transform:uppercase; letter-spacing:0.08em; margin-top:6px;}
+  .redacted{
+    background:var(--redact); color:var(--redact);
+    padding:0 4px; border-radius:1px; user-select:none;
+  }
+
+  /* ---------- TIMELINE ---------- */
+  .timeline{position:relative; padding-left:26px; border-left:1px solid var(--line);}
+  .tl-item{position:relative; padding:0 0 40px 26px;}
+  .tl-item:last-child{padding-bottom:0;}
+  .tl-item::before{
+    content:""; position:absolute; left:-32px; top:3px;
+    width:11px; height:11px; border-radius:50%;
+    background:var(--bg-0); border:2px solid var(--phosphor);
+  }
+  .tl-year{
+    font-family:'Oswald',sans-serif; font-weight:700; font-size:22px;
+    color:var(--phosphor); letter-spacing:0.02em;
+  }
+  .tl-title{font-size:14px; font-weight:600; color:#eef4f2; margin:4px 0 6px; text-transform:uppercase; letter-spacing:0.03em;}
+  .tl-desc{font-size:13px; color:var(--text-dim); max-width:640px;}
+
+  /* ---------- CREDIBILITY LEGEND ---------- */
+  .legend{
+    display:flex; gap:24px; flex-wrap:wrap;
+    border-top:1px solid var(--line-soft); border-bottom:1px solid var(--line-soft);
+    padding:22px 0; margin:60px 0; font-size:12px; color:var(--text-dim);
+  }
+  .legend b{color:var(--amber);}
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    border-top:1px solid var(--line-soft);
+    padding:40px 0 50px;
+    font-size:11px; color:var(--text-faint);
+  }
+  footer .foot-inner{display:flex; justify-content:space-between; flex-wrap:wrap; gap:16px;}
+  footer .disclaimer{max-width:640px; line-height:1.7;}
+  .stamp-mark{
+    display:inline-block; border:2px solid var(--stamp); color:var(--stamp);
+    font-family:'Oswald',sans-serif; font-weight:700; letter-spacing:0.12em;
+    padding:4px 10px; font-size:11px; transform:rotate(-3deg);
+  }
+
+  a.cta{
+    display:inline-flex; align-items:center; gap:8px;
+    margin-top:34px;
+    border:1px solid var(--phosphor); color:var(--phosphor);
+    padding:12px 20px; font-size:12px; letter-spacing:0.08em; text-transform:uppercase;
+    text-decoration:none; font-family:'IBM Plex Mono',monospace;
+    transition:background 0.2s ease, color 0.2s ease;
+  }
+  a.cta:hover{background:var(--phosphor); color:#04120b;}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand"><span class="dot"></span>ARQUIVO X-BR</div>
+    <nav class="toplinks">
+      <a href="#entidades">Entidades</a>
+      <a href="#linha-do-tempo">Linha do tempo</a>
+      <a href="#sobre">Sobre o arquivo</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="radar">
+    <div class="radar-sweep"></div>
+    <div class="blip" style="top:38%; left:62%; animation-delay:0.3s;"></div>
+    <div class="blip" style="top:65%; left:40%; animation-delay:1.8s;"></div>
+    <div class="blip" style="top:22%; left:30%; animation-delay:2.6s;"></div>
+  </div>
+  <div class="wrap">
+    <div class="eyebrow">Registro não oficial · acesso público</div>
+    <h1 class="title">Catálogo de<br>encontros <span>não&nbsp;identificados</span></h1>
+    <p class="sub">Um dossiê compilado a partir de relatos, depoimentos e boatos de décadas de ufologia — organizado como um arquivo desclassificado, não como fato científico.</p>
+    <div class="hero-meta">
+      <div><b>6</b>Entidades catalogadas</div>
+      <div><b>1947–2021</b>Período coberto</div>
+      <div><b>0%</b>Confirmação oficial</div>
+    </div>
+    <a href="#entidades" class="cta">Abrir dossiê →</a>
+  </div>
+</section>
+
+<section class="section" id="entidades">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-tag">Fichas técnicas</span>
+      <h2 class="section-title">Entidades catalogadas</h2>
+      <p class="section-desc">Perfis compilados a partir dos tipos mais recorrentes na literatura ufológica popular. Nomes, aparência e comportamento variam entre fontes — o que segue é o consenso do folclore, não uma classificação verificada.</p>
+    </div>
+
+    <div class="entities">
+
+      <div class="card" data-case="0447">
+        <div class="card-head"><h3>Cinzentos</h3></div>
+        <div class="also">"Greys" · o arquétipo clássico</div>
+        <p class="desc">Baixa estatura, pele acinzentada, cabeça grande e olhos escuros amendoados. O tipo mais citado desde o caso <span class="redacted">Roswell 1947</span>, associado a relatos de abdução e exames.</p>
+        <div class="stats">
+          <div class="stat-row"><span>Primeiro relato</span><span>1947, EUA</span></div>
+          <div class="stat-row"><span>Comportamento</span><span>Observador / clínico</span></div>
+          <div class="stat-row"><span>Ocorrência</span><span>Muito alta</span></div>
+        </div>
+        <div class="threat"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></div>
+        <div class="threat-label">Nível de ameaça relatado: baixo</div>
+      </div>
+
+      <div class="card" data-case="1102">
+        <div class="card-head"><h3>Reptilianos</h3></div>
+        <div class="also">"Draconianos" · figura de teoria da conspiração</div>
+        <p class="desc">Humanoides com traços répteis, associados por teóricos a controle de instituições e famílias de elite. Sem qualquer relato de contato direto verificável — praticamente todo o material vem de segunda mão.</p>
+        <div class="stats">
+          <div class="stat-row"><span>Primeiro relato</span><span>Anos 1980, folclore</span></div>
+          <div class="stat-row"><span>Comportamento</span><span>Camuflado / infiltrado</span></div>
+          <div class="stat-row"><span>Ocorrência</span><span>Baixa (rumor)</span></div>
+        </div>
+        <div class="threat"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div>
+        <div class="threat-label">Nível de ameaça relatado: alto (não verificado)</div>
+      </div>
+
+      <div class="card" data-case="0289">
+        <div class="card-head"><h3>Nórdicos</h3></div>
+        <div class="also">"Pleiadianos" · contato benevolente</div>
+        <p class="desc">Aparência humana, altos, loiros, olhos claros. Figuram em relatos de "contactados" das décadas de 1950–70, que descrevem mensagens de paz e alertas sobre a humanidade.</p>
+        <div class="stats">
+          <div class="stat-row"><span>Primeiro relato</span><span>1952, contactismo</span></div>
+          <div class="stat-row"><span>Comportamento</span><span>Comunicativo</span></div>
+          <div class="stat-row"><span>Ocorrência</span><span>Moderada</span></div>
+        </div>
+        <div class="threat"><i class="on"></i><i></i><i></i><i></i><i></i></div>
+        <div class="threat-label">Nível de ameaça relatado: nenhum</div>
+      </div>
+
+      <div class="card" data-case="0733">
+        <div class="card-head"><h3>Mantídeos</h3></div>
+        <div class="also">"Mantis" · forma insectoide</div>
+        <p class="desc">Descritos como altos, magros, com traços de louva-a-deus. Aparecem com menor frequência, geralmente em relatos que envolvem comunicação telepática e presença junto a Cinzentos.</p>
+        <div class="stats">
+          <div class="stat-row"><span>Primeiro relato</span><span>Anos 1990, abduções</span></div>
+          <div class="stat-row"><span>Comportamento</span><span>Distante / hierárquico</span></div>
+          <div class="stat-row"><span>Ocorrência</span><span>Rara</span></div>
+        </div>
+        <div class="threat"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></div>
+        <div class="threat-label">Nível de ameaça relatado: incerto</div>
+      </div>
+
+      <div class="card" data-case="0016">
+        <div class="card-head"><h3>Homens de Preto</h3></div>
+        <div class="also">"MIB" · não classificados como alienígenas</div>
+        <p class="desc">Figuras humanas em ternos escuros que, segundo relatos, visitam testemunhas de avistamentos para intimidá-las ao silêncio. Origem controversa — teoria vai de agentes governamentais a algo mais estranho.</p>
+        <div class="stats">
+          <div class="stat-row"><span>Primeiro relato</span><span>1953, EUA</span></div>
+          <div class="stat-row"><span>Comportamento</span><span>Ameaçador / evasivo</span></div>
+          <div class="stat-row"><span>Ocorrência</span><span>Moderada</span></div>
+        </div>
+        <div class="threat"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></div>
+        <div class="threat-label">Nível de ameaça relatado: médio</div>
+      </div>
+
+      <div class="card" data-case="0958">
+        <div class="card-head"><h3>Vultos / Sombras</h3></div>
+        <div class="also">"Shadow People" · fronteira com o paranormal</div>
+        <p class="desc">Silhuetas escuras e sem detalhes, frequentemente relatadas em quartos à noite. Sobrepõe-se a relatos de paralisia do sono, o que torna esse o caso mais debatido entre ufologia e psicologia popular.</p>
+        <div class="stats">
+          <div class="stat-row"><span>Primeiro relato</span><span>Difuso, folclore antigo</span></div>
+          <div class="stat-row"><span>Comportamento</span><span>Observador silencioso</span></div>
+          <div class="stat-row"><span>Ocorrência</span><span>Alta</span></div>
+        </div>
+        <div class="threat"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></div>
+        <div class="threat-label">Nível de ameaça relatado: baixo, alto fator de medo</div>
+      </div>
+
+    </div>
+
+    <div class="legend">
+      <div><b>Ocorrência</b> — frequência do tipo nos relatos compilados, não uma medida científica.</div>
+      <div><b>Ameaça</b> — impressão subjetiva relatada por testemunhas, sem qualquer verificação.</div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="linha-do-tempo">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-tag">Cronologia</span>
+      <h2 class="section-title">Linha do tempo de casos famosos</h2>
+      <p class="section-desc">Marcos que moldaram a cultura ufológica moderna, do nascimento do termo "disco voador" aos relatórios oficiais mais recentes sobre fenômenos anômalos não identificados.</p>
+    </div>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-year">1947</div>
+        <div class="tl-title">Avistamento de Kenneth Arnold</div>
+        <div class="tl-desc">Piloto relata nove objetos voando em formação perto do Monte Rainier, EUA. A imprensa cunha o termo "disco voador" a partir de sua descrição.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">1947</div>
+        <div class="tl-title">Incidente de Roswell</div>
+        <div class="tl-desc">Destroços encontrados em um rancho no Novo México geram o caso mais citado da ufologia, alimentado por décadas de versões contraditórias e teorias de encobrimento.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">1980</div>
+        <div class="tl-title">Floresta de Rendlesham</div>
+        <div class="tl-desc">Militares da força aérea dos EUA baseados no Reino Unido relatam luzes e um objeto pousado na floresta — considerado um dos casos mais bem documentados por testemunhas militares.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">1997</div>
+        <div class="tl-title">Luzes de Phoenix</div>
+        <div class="tl-desc">Milhares de pessoas no Arizona relatam luzes em formação de V cruzando o céu noturno, em um dos avistamentos em massa mais famosos dos EUA.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2004</div>
+        <div class="tl-title">Vídeo "Tic Tac" da Marinha dos EUA</div>
+        <div class="tl-desc">Pilotos de caça registram um objeto sem asas nem motores visíveis realizando manobras consideradas incompatíveis com aeronaves conhecidas.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2021</div>
+        <div class="tl-title">Relatório do Pentágono sobre UAPs</div>
+        <div class="tl-desc">O governo dos EUA divulga um relatório oficial reconhecendo dezenas de casos de "fenômenos anômalos não identificados" sem explicação convencional definitiva.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer id="sobre">
+  <div class="wrap foot-inner">
+    <div class="disclaimer">
+      <span class="stamp-mark">Não confirmado</span>
+      <p style="margin-top:14px;">Este arquivo reúne relatos, folclore e teorias populares de ufologia com fins de entretenimento e catalogação cultural. Nenhuma das entidades ou eventos listados possui confirmação científica ou oficial — trate como registro de crenças e histórias, não como fato.</p>
+    </div>
+    <div>
+      <div>ARQUIVO X-BR</div>
+      <div style="margin-top:6px;">Compilação não oficial · uso livre</div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
