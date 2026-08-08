@@ -216,6 +216,79 @@
   .card-img{margin:-22px -22px 16px; overflow:hidden; border-bottom:1px solid var(--line);}
   .card-img img{width:100%; height:150px; object-fit:cover; display:block; filter:grayscale(0.3) contrast(1.05);}
 
+  /* ---------- Porosidade entre dimensões ---------- */
+  .porosity-lede{
+    max-width:720px; color:var(--text-dim); font-size:14px; margin-bottom:48px;
+  }
+  .porosity-lede p{margin-top:14px;}
+  .porosity-lede b{color:var(--text);}
+  .motif-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
+    gap:16px;
+    margin-bottom:48px;
+  }
+  .motif{
+    background:var(--bg-1);
+    border:1px solid var(--line);
+    padding:18px 20px;
+  }
+  .motif-tag{
+    font-size:10px; letter-spacing:0.1em; text-transform:uppercase;
+    color:var(--phosphor-dim); display:block; margin-bottom:8px;
+  }
+  .motif h4{
+    font-family:'Oswald', sans-serif; font-weight:600; text-transform:uppercase;
+    font-size:14px; color:#eef4f2; margin-bottom:8px; letter-spacing:0.02em;
+  }
+  .motif-compare{display:flex; flex-direction:column; gap:6px; font-size:12px;}
+  .motif-compare div{display:flex; gap:8px;}
+  .motif-compare span:first-child{color:var(--text-faint); min-width:64px; flex-shrink:0;}
+  .motif-compare span:last-child{color:var(--text-dim);}
+  .porosity-close{
+    max-width:720px;
+    border-top:1px solid var(--line-soft);
+    padding-top:28px;
+    color:var(--text-dim);
+    font-size:14px;
+  }
+  .porosity-close p{margin-top:14px;}
+
+  /* ---------- Perfil: Jacques Vallée ---------- */
+  .profile-grid{
+    display:grid;
+    grid-template-columns:1.3fr 1fr;
+    gap:40px;
+    align-items:start;
+  }
+  @media (max-width:820px){.profile-grid{grid-template-columns:1fr;}}
+  .profile-bio{color:var(--text-dim); font-size:14px;}
+  .profile-bio p{margin-bottom:14px;}
+  .profile-bio b{color:var(--text);}
+  .profile-callout{
+    border-left:2px solid var(--amber);
+    padding:10px 0 10px 16px;
+    margin:20px 0;
+    color:var(--text);
+    font-size:13px;
+    font-style:italic;
+  }
+  .profile-fact{
+    background:var(--bg-1);
+    border:1px solid var(--line);
+    padding:22px;
+  }
+  .profile-fact .verified-tag{
+    display:inline-flex; align-items:center; gap:6px;
+    font-size:10px; letter-spacing:0.1em; text-transform:uppercase;
+    color:var(--amber); border:1px solid rgba(226,162,59,0.4);
+    padding:4px 10px; margin-bottom:16px;
+  }
+  .profile-fact h4{
+    font-family:'Oswald', sans-serif; font-weight:600; text-transform:uppercase;
+    font-size:16px; color:#eef4f2; margin-bottom:16px; letter-spacing:0.02em;
+  }
+
   /* ---------- TIMELINE ---------- */
   .timeline{position:relative; padding-left:26px; border-left:1px solid var(--line);}
   .tl-item{position:relative; padding:0 0 40px 26px;}
@@ -273,6 +346,8 @@
     <nav class="toplinks">
       <a href="#entidades">Entidades</a>
       <a href="#linha-do-tempo">Linha do tempo</a>
+      <a href="#vallee">Jacques Vallée</a>
+      <a href="#dimensoes">Dimensões</a>
       <a href="#sobre">Sobre o arquivo</a>
     </nav>
   </div>
@@ -327,6 +402,121 @@
 
     <div class="timeline" id="timeline-list">
       <p class="empty-msg">Carregando registros...</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="vallee">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-tag">Perfil</span>
+      <h2 class="section-title">Jacques Vallée — o nome por trás da hipótese</h2>
+      <p class="section-desc">Antes de qualquer teoria sobre porosidade dimensional, tem um pesquisador real por trás dela. Diferente das entidades catalogadas acima, isto não é folclore — é biografia verificável.</p>
+    </div>
+
+    <div class="profile-grid">
+      <div class="profile-bio">
+        <p><b>Jacques Fabrice Vallée</b> nasceu em 1939, em Pontoise, França. Formado em matemática pela Sorbonne e mestre em astrofísica pela Universidade de Lille, começou a carreira como astrônomo no Observatório de Paris antes de se mudar para os Estados Unidos em 1962, onde ajudou a construir o primeiro mapa computadorizado de Marte para a NASA, na Universidade do Texas.</p>
+        <p>Doutorou-se em ciência da computação pela Northwestern University, onde se tornou próximo de <b>J. Allen Hynek</b>, o astrônomo que consultoria a Força Aérea dos EUA no Projeto Livro Azul e viria a ser seu mentor nos estudos sobre OVNIs. Mais tarde, no Stanford Research Institute, Vallée também esteve envolvido em programas de pesquisa sobre percepção remota financiados pelo governo americano — episódio que reforçou sua fama de cientista disposto a investigar o que a ciência convencional evita.</p>
+        <p>É autor de uma série de livros que se tornaram referência no campo, entre eles <i>Passport to Magonia</i>, <i>The Invisible College</i> e <i>Forbidden Science</i>. Foi nesses trabalhos que desenvolveu o argumento central da <b>hipótese interdimensional</b>: comparando milhares de relatos de contato ao longo da história, Vallée notou que encontros com "alienígenas" seguem os mesmos padrões narrativos de encontros antigos com fadas, espíritos e aparições religiosas — sugerindo uma origem comum não extraterrestre, e sim ligada a alguma outra camada da realidade.</p>
+
+        <div class="profile-callout">
+          Vallée chegou a defender essa leitura diretamente com Steven Spielberg durante a produção de "Contatos Imediatos de Terceiro Grau" — tentando convencê-lo de que a história ficaria mais interessante sem alienígenas convencionais. Spielberg concordou que a ideia era boa, mas optou pelo enredo mais familiar ao público.
+        </div>
+
+        <p>O resultado dessa conversa está na tela: o personagem inspirado no próprio Vallée, batizado de "Claude Lacombe", foi interpretado pelo cineasta francês <b>François Truffaut</b> — sua única grande atuação como ator em um filme de outro diretor.</p>
+      </div>
+
+      <div class="profile-fact">
+        <span class="verified-tag">● Figura real, não folclórica</span>
+        <h4>Ficha resumida</h4>
+        <div class="stats">
+          <div class="stat-row"><span>Nascimento</span><span>1939, Pontoise (FR)</span></div>
+          <div class="stat-row"><span>Formação</span><span>Astrofísica · Ciência da computação</span></div>
+          <div class="stat-row"><span>Mentor</span><span>J. Allen Hynek</span></div>
+          <div class="stat-row"><span>Hipótese central</span><span>Interdimensional</span></div>
+          <div class="stat-row"><span>Livro-chave</span><span>Passport to Magonia (1969)</span></div>
+          <div class="stat-row"><span>No cinema</span><span>Inspirou "Lacombe" (Truffaut, 1977)</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="dimensoes">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-tag">Hipóteses de fronteira</span>
+      <h2 class="section-title">A porosidade entre dimensões</h2>
+      <p class="section-desc">Um dos ramos menos convencionais da ufologia não trata discos voadores como naves vindas de outro planeta, mas como incursões vindas de <span class="redacted">outra camada da realidade</span> — mais perto de uma fresta do que de uma viagem espacial.</p>
+    </div>
+
+    <div class="porosity-lede">
+      <p>Vallée não foi o único a notar o padrão, mas foi quem melhor o articulou: relatos modernos de contato alienígena seguem a mesma estrutura de séculos de encontros com fadas, espíritos e entidades angelicais — só que traduzidos para o vocabulário do século XX, com naves no lugar de reinos encantados e "cinzentos" no lugar de duendes.</p>
+      <p>A partir daí, uma hipótese: o fenômeno não seria fixo em forma nem em origem. Ele se manifestaria através de uma <b>membrana porosa entre dimensões</b> — uma fresta que se abre em certos lugares, estados de consciência ou momentos, e que a mente humana preenche com as imagens disponíveis na sua época e cultura.</p>
+    </div>
+
+    <div class="motif-grid">
+
+      <div class="motif">
+        <span class="motif-tag">Padrão recorrente 01</span>
+        <h4>Imobilidade / paralisia</h4>
+        <div class="motif-compare">
+          <div><span>Abdução</span><span>Testemunha relata travar o corpo no instante em que a entidade aparece, como se o tempo normal parasse.</span></div>
+          <div><span>Outros relatos</span><span>Paralisia do sono, "peso no peito", experiências de quase-morte e certos estados de meditação profunda descrevem a mesma imobilidade súbita.</span></div>
+        </div>
+      </div>
+
+      <div class="motif">
+        <span class="motif-tag">Padrão recorrente 02</span>
+        <h4>Tempo fora do eixo</h4>
+        <div class="motif-compare">
+          <div><span>Abdução</span><span>"Tempo perdido" — horas que desaparecem da memória da testemunha, sem explicação.</span></div>
+          <div><span>Outros relatos</span><span>Jornadas xamânicas, experiências visionárias induzidas (incluindo por DMT) e relatos de quase-morte descrevem o mesmo colapso da noção linear de tempo.</span></div>
+        </div>
+      </div>
+
+      <div class="motif">
+        <span class="motif-tag">Padrão recorrente 03</span>
+        <h4>Comunicação sem palavras</h4>
+        <div class="motif-compare">
+          <div><span>Abdução</span><span>Entidades que "falam" diretamente na mente da testemunha, sem uso de linguagem falada.</span></div>
+          <div><span>Outros relatos</span><span>O mesmo tipo de comunicação telepática aparece em relatos de contato místico, transes e visões induzidas de diferentes tradições.</span></div>
+        </div>
+      </div>
+
+      <div class="motif">
+        <span class="motif-tag">Padrão recorrente 04</span>
+        <h4>Ambiente geométrico</h4>
+        <div class="motif-compare">
+          <div><span>Abdução</span><span>Salas descritas como não-euclidianas, superfícies curvas, luzes sem fonte aparente, arquitetura "impossível".</span></div>
+          <div><span>Outros relatos</span><span>Padrões geométricos complexos e paisagens "não-físicas" são um dos elementos mais citados em experiências visionárias com DMT — mas também em certas visões místicas antigas.</span></div>
+        </div>
+      </div>
+
+      <div class="motif">
+        <span class="motif-tag">Padrão recorrente 05</span>
+        <h4>Exame ou iniciação</h4>
+        <div class="motif-compare">
+          <div><span>Abdução</span><span>Sensação de estar sendo examinado, estudado ou submetido a algum tipo de procedimento por entidades.</span></div>
+          <div><span>Outros relatos</span><span>Rituais xamânicos de iniciação e certas experiências visionárias profundas também descrevem esse sentimento de "ser processado" por algo maior.</span></div>
+        </div>
+      </div>
+
+      <div class="motif">
+        <span class="motif-tag">Padrão recorrente 06</span>
+        <h4>Memória incompleta</h4>
+        <div class="motif-compare">
+          <div><span>Abdução</span><span>A lembrança do encontro costuma vir fragmentada, às vezes só recuperada depois, sob hipnose ou com o tempo.</span></div>
+          <div><span>Outros relatos</span><span>A dificuldade de traduzir em palavras uma experiência visionária intensa — seja mística, near-death ou induzida — é quase universal nesses relatos.</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="porosity-close">
+      <p>O ponto central dessa hipótese não é o DMT em si — é a ideia de que existem <b>vários portais possíveis</b> para o mesmo tipo de encontro: sono, meditação profunda, trauma, proximidade da morte, certos lugares, e também substâncias. O fenômeno OVNI, nessa leitura, seria só mais uma porta entre outras — e talvez nem a mais comum.</p>
+      <p>Vale reforçar: isso é uma hipótese de fronteira dentro da ufologia, não um consenso científico. Ela não tem mais respaldo empírico do que a hipótese extraterrestre convencional — é só outra lente possível sobre um fenômeno que, até hoje, ninguém explicou por completo.</p>
     </div>
   </div>
 </section>
