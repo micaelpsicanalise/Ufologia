@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="42%" r="60%">
+      <stop offset="0%" stop-color="#4fe3a8" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#4fe3a8" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- fundo -->
+  <rect width="64" height="64" rx="12" fill="#080b0f"/>
+
+  <!-- brilho radar -->
+  <circle cx="32" cy="27" r="26" fill="url(#glow)"/>
+
+  <!-- aneis de radar -->
+  <circle cx="32" cy="46" r="20" fill="none" stroke="#1a232d" stroke-width="1.5"/>
+  <circle cx="32" cy="46" r="13" fill="none" stroke="#1a232d" stroke-width="1.5"/>
+
+  <!-- feixe de luz do disco -->
+  <polygon points="32,20 20,50 44,50" fill="#4fe3a8" opacity="0.14"/>
+
+  <!-- disco voador -->
+  <ellipse cx="32" cy="30" rx="19" ry="5.5" fill="#c9d6d3"/>
+  <ellipse cx="32" cy="30" rx="19" ry="5.5" fill="none" stroke="#4fe3a8" stroke-width="1.6"/>
+  <path d="M20 30 Q32 15 44 30" fill="#0d1218" stroke="#4fe3a8" stroke-width="1.6"/>
+  <ellipse cx="32" cy="24" rx="8" ry="6" fill="#4fe3a8" opacity="0.9"/>
+
+  <!-- luzes -->
+  <circle cx="20" cy="30.5" r="1.6" fill="#e2a23b"/>
+  <circle cx="32" cy="32.5" r="1.6" fill="#e2a23b"/>
+  <circle cx="44" cy="30.5" r="1.6" fill="#e2a23b"/>
+
+  <!-- ponto de contato no radar -->
+  <circle cx="32" cy="46" r="2" fill="#c1443a"/>
+</svg>
