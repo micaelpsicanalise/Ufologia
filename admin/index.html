@@ -159,8 +159,14 @@
         <input type="text" id="entidadeAmeacaLabel" placeholder="ex: baixo, alto (não verificado), incerto...">
       </div>
       <div class="field">
-        <label for="entidadeImagem">URL da imagem (opcional)</label>
-        <input type="text" id="entidadeImagem" placeholder="preencher quando houver ilustração">
+        <label for="entidadeImagemFile">Imagem (upload)</label>
+        <input type="file" id="entidadeImagemFile" accept="image/*">
+        <div id="entidadeImagemPreview" class="image-preview"></div>
+        <p class="field-hint" id="entidadeImagemStatus"></p>
+      </div>
+      <div class="field">
+        <label for="entidadeImagem">URL da imagem</label>
+        <input type="text" id="entidadeImagem" placeholder="preenchido automaticamente após o upload, ou cole um link direto">
       </div>
       <div class="field">
         <label for="entidadeOrdem">Ordem</label>
