@@ -317,6 +317,18 @@
     font-size:14px; color:#eef4f2; margin-bottom:8px; letter-spacing:0.02em;
   }
   .hist-body p{font-size:13px; color:var(--text-dim);}
+  .conspiracy-block{
+    margin-top:14px;
+    border-left:2px solid var(--stamp);
+    padding:10px 0 10px 14px;
+  }
+  .conspiracy-tag{
+    display:block;
+    font-size:9px; letter-spacing:0.1em; text-transform:uppercase;
+    color:var(--stamp); margin-bottom:6px;
+  }
+  .conspiracy-block p{font-size:12.5px; color:var(--text-dim); font-style:italic;}
+  .tl-desc + .conspiracy-block{margin-top:10px;}
 
   /* ---------- TIMELINE ---------- */
   .timeline{position:relative; padding-left:26px; border-left:1px solid var(--line);}
@@ -668,6 +680,12 @@
         <div class="tl-year">${esc(c.ano)}</div>
         <div class="tl-title">${esc(c.titulo)}</div>
         <div class="tl-desc">${esc(c.descricao || '')}</div>
+        ${c.teoria_conspiracao ? `
+          <div class="conspiracy-block">
+            <span class="conspiracy-tag">● Teoria da conspiração</span>
+            <p>${esc(c.teoria_conspiracao)}</p>
+          </div>
+        ` : ''}
       </div>
     `).join('');
   }
@@ -699,6 +717,12 @@
         <div class="hist-body">
           <h4>${esc(h.titulo)}</h4>
           <p>${esc(h.descricao || '')}</p>
+          ${h.teoria_conspiracao ? `
+            <div class="conspiracy-block">
+              <span class="conspiracy-tag">● Teoria da conspiração</span>
+              <p>${esc(h.teoria_conspiracao)}</p>
+            </div>
+          ` : ''}
         </div>
       </div>
     `).join('');

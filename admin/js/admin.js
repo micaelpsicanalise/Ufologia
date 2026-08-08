@@ -332,6 +332,7 @@ function editCaso(id, data) {
   document.getElementById('casoTitulo').value = c.titulo || '';
   document.getElementById('casoSlug').value = c.slug || '';
   document.getElementById('casoDescricao').value = c.descricao || '';
+  document.getElementById('casoConspiracao').value = c.teoria_conspiracao || '';
   document.getElementById('casoOrdem').value = c.ordem ?? 0;
   document.getElementById('casoPublicado').checked = !!c.publicado;
   openCasoModal('Editar caso');
@@ -354,6 +355,7 @@ casoForm.addEventListener('submit', async (e) => {
     titulo: document.getElementById('casoTitulo').value.trim(),
     slug: document.getElementById('casoSlug').value.trim(),
     descricao: document.getElementById('casoDescricao').value.trim() || null,
+    teoria_conspiracao: document.getElementById('casoConspiracao').value.trim() || null,
     ordem: parseInt(document.getElementById('casoOrdem').value, 10) || 0,
     publicado: document.getElementById('casoPublicado').checked,
     atualizado_em: new Date().toISOString()
@@ -439,6 +441,7 @@ function editHistorico(id, data) {
   document.getElementById('historicoPeriodo').value = h.periodo || '';
   document.getElementById('historicoLocal').value = h.local || '';
   document.getElementById('historicoDescricao').value = h.descricao || '';
+  document.getElementById('historicoConspiracao').value = h.teoria_conspiracao || '';
   document.getElementById('historicoOrdem').value = h.ordem ?? 0;
   document.getElementById('historicoPublicado').checked = !!h.publicado;
   openHistoricoModal('Editar relato');
@@ -463,6 +466,7 @@ historicoForm.addEventListener('submit', async (e) => {
     periodo: document.getElementById('historicoPeriodo').value.trim() || null,
     local: document.getElementById('historicoLocal').value.trim() || null,
     descricao: document.getElementById('historicoDescricao').value.trim() || null,
+    teoria_conspiracao: document.getElementById('historicoConspiracao').value.trim() || null,
     ordem: parseInt(document.getElementById('historicoOrdem').value, 10) || 0,
     publicado: document.getElementById('historicoPublicado').checked,
     atualizado_em: new Date().toISOString()
