@@ -153,6 +153,17 @@
   .threat-bars-lg i.on{background:var(--stamp);}
   .detail-threat .desc{font-size:13px; color:var(--text-dim);}
 
+  .detail-conspiracy{
+    border-left:2px solid var(--stamp);
+    padding:16px 0 16px 20px;
+    margin-bottom:48px;
+  }
+  .detail-conspiracy .tag{
+    display:block; font-size:10px; letter-spacing:0.1em; text-transform:uppercase;
+    color:var(--stamp); margin-bottom:10px;
+  }
+  .detail-conspiracy p{font-size:13.5px; color:var(--text-dim); font-style:italic;}
+
   .redacted{background:var(--redact); color:var(--redact); padding:0 4px; border-radius:1px; user-select:none;}
 
   /* ---------- PREV/NEXT ---------- */
@@ -194,7 +205,7 @@
 </header>
 
 <div class="wrap">
-  <a href="index.html#entidades" class="back-link">← Voltar ao dossiê</a>
+  <a href="index.html#entidades" class="back-link" id="backLink">← Voltar ao dossiê</a>
 
   <div id="content">
     <p class="empty-msg">Carregando ficha...</p>
@@ -237,7 +248,15 @@
   async function loadEntidade() {
     const params = new URLSearchParams(window.location.search);
     const slug = params.get('slug');
+    const tipo = params.get('tipo') === 'criptideo' ? 'criptideo' : 'entidade';
+    const table = tipo === 'criptideo' ? 'criptideos' : 'entidades';
     const content = document.getElementById('content');
+
+    const backLink = document.getElementById('backLink');
+    if (tipo === 'criptideo') {
+      backLink.href = 'index.html#criptideos';
+      backLink.textContent = '← Voltar aos criptídeos';
+    }
 
     if (!slug) {
       content.innerHTML = '<p class="empty-msg">Nenhum registro especificado.</p>';
@@ -245,7 +264,7 @@
     }
 
     const { data: all, error } = await sb
-      .from('entidades')
+      .from(table)
       .select('*')
       .eq('publicado', true)
       .order('ordem', { ascending: true });
@@ -290,11 +309,18 @@
         <div class="desc">${esc(e.nivel_ameaca_label || 'não especificado')} — impressão subjetiva de testemunhas, sem qualquer verificação.</div>
       </div>
 
+      ${e.teoria_conspiracao ? `
+        <div class="detail-conspiracy">
+          <span class="tag">● Teoria da conspiração</span>
+          <p>${esc(e.teoria_conspiracao)}</p>
+        </div>
+      ` : ''}
+
       <div class="detail-nav">
-        <a href="entidade.html?slug=${encodeURIComponent(prev.slug)}" class="prev">
+        <a href="entidade.html?tipo=${tipo}&slug=${encodeURIComponent(prev.slug)}" class="prev">
           <span class="dir">← Anterior</span>${esc(prev.nome)}
         </a>
-        <a href="entidade.html?slug=${encodeURIComponent(next.slug)}" class="next">
+        <a href="entidade.html?tipo=${tipo}&slug=${encodeURIComponent(next.slug)}" class="next">
           <span class="dir">Próxima →</span>${esc(next.nome)}
         </a>
       </div>

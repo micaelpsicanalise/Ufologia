@@ -386,6 +386,7 @@
     <div class="brand"><span class="dot"></span>ARQUIVO X-BR</div>
     <nav class="toplinks">
       <a href="#entidades">Entidades</a>
+      <a href="#criptideos">Criptídeos</a>
       <a href="#linha-do-tempo">Linha do tempo</a>
       <a href="#historico">Camada histórica</a>
       <a href="#vallee">Jacques Vallée</a>
@@ -430,6 +431,20 @@
     <div class="legend">
       <div><b>Ocorrência</b> — frequência do tipo nos relatos compilados, não uma medida científica.</div>
       <div><b>Ameaça</b> — impressão subjetiva relatada por testemunhas, sem qualquer verificação.</div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="criptideos">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-tag">Zoologia de fronteira</span>
+      <h2 class="section-title">Animais criptídeos</h2>
+      <p class="section-desc">Diferente das entidades acima, estes não são seres alienígenas — são animais que a ciência oficial nega, ou negou até ser forçada a reconhecer. Cada verbete traz a leitura convencional lado a lado com a teoria de fronteira, quando ela existe.</p>
+    </div>
+
+    <div class="entities" id="criptideos-grid">
+      <p class="empty-msg">Carregando registros...</p>
     </div>
   </div>
 </section>
@@ -710,8 +725,40 @@
   }
 
   loadEntidades();
+  loadCriptideos();
   loadCasos();
   loadHistoricos();
+
+  async function loadCriptideos() {
+    const grid = document.getElementById('criptideos-grid');
+    const { data, error } = await sb
+      .from('criptideos')
+      .select('*')
+      .eq('publicado', true)
+      .order('ordem', { ascending: true });
+
+    if (error || !data || data.length === 0) {
+      grid.innerHTML = '<p class="empty-msg">Nenhum registro publicado no momento.</p>';
+      return;
+    }
+
+    grid.innerHTML = data.map(c => `
+      <a class="card" data-case="${esc(c.caso_numero || '')}" href="entidade.html?tipo=criptideo&slug=${encodeURIComponent(c.slug)}">
+        ${c.imagem_url ? `<div class="card-img"><img src="${esc(c.imagem_url)}" alt="${esc(c.nome)}"></div>` : ''}
+        <div class="card-head"><h3>${esc(c.nome)}</h3></div>
+        <div class="also">${esc(c.apelido || '')}</div>
+        <p class="desc">${esc(c.descricao || '')}</p>
+        <div class="stats">
+          <div class="stat-row"><span>Primeiro relato</span><span>${esc(c.primeiro_relato || '—')}</span></div>
+          <div class="stat-row"><span>Comportamento</span><span>${esc(c.comportamento || '—')}</span></div>
+          <div class="stat-row"><span>Ocorrência</span><span>${esc(OCORRENCIA_LABEL[c.ocorrencia] || c.ocorrencia || '—')}</span></div>
+        </div>
+        <div class="threat">${threatBars(c.nivel_ameaca)}</div>
+        <div class="threat-label">Nível de ameaça relatado: ${esc(c.nivel_ameaca_label || '—')}</div>
+        ${c.teoria_conspiracao ? '<div class="threat-label" style="color:var(--stamp); margin-top:8px;">● Tem teoria da conspiração — abrir ficha</div>' : ''}
+      </a>
+    `).join('');
+  }
 
   async function loadHistoricos() {
     const list = document.getElementById('historicos-list');

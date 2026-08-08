@@ -1,0 +1,15 @@
+-- ===================================================================
+-- ARQUIVO X-BR — verbete: Dragões
+-- Rode isto DEPOIS de migrate-pegrande.sql.
+-- ===================================================================
+
+insert into ufologia.criptideos
+  (nome, slug, apelido, caso_numero, descricao, teoria_conspiracao, primeiro_relato, comportamento, ocorrencia, nivel_ameaca, nivel_ameaca_label, ordem, publicado)
+values
+  ('Dragões', 'dragoes', '"O predador que toda civilização antiga descreveu"', '0120',
+   'Sumérios, egípcios, chineses, gregos, romanos, nórdicos, galeses, astecas e aborígenes australianos — cada um, isoladamente, registrou um grande predador reptiliano com traços muito parecidos. Plínio, o Velho, descreve no livro 8 de sua História Natural (77 d.C.) uma serpente gigante enfrentada pelo exército romano no rio Bágrada, no norte da África, em 256 a.C. — o relato antigo chega a dar uma medida de 120 pés, quase certamente exagerada, mas registrada com o mesmo tom factual usado pra descrever elefantes e leões. Na Catedral de Wawel, na Polônia, ossos pendurados desde a Idade Média e identificados pela tradição local como restos do "dragão de Cracóvia" foram, sob exame científico moderno, identificados como uma costela de baleia, o fêmur de um mamute-lanoso e a perna de um rinoceronte-lanoso — nenhum dos três um animal que os poloneses medievais teriam visto vivo. A leitura acadêmica hoje mais aceita, defendida por historiadores da ciência como Adrienne Mayor, é que boa parte do mito do dragão nasceu de ossadas fósseis reais — de dinossauros, mamíferos pré-históricos e outros animais extintos — interpretadas por culturas antigas como restos de monstros, sem acesso a paleontologia formal.',
+   'Uma leitura de fronteira, popular em vídeos de "história alternativa", conecta esses fatos de um jeito mais provocador: o dragão de Komodo só entrou pro registro científico ocidental em 1910, quando um oficial holandês matou um exemplar — apesar da espécie já ser conhecida havia séculos por pescadores locais na mesma rota marítima usada pela Europa havia 400 anos. Essa teoria argumenta que a virada científica do início do século XIX, quando Georges Cuvier consolidou a ideia de extinção e reclassificou ossadas de "dragão" como fósseis de espécies já extintas, não foi só uma mudança de paradigma científico normal — teria sido também uma espécie de apagamento institucional de uma memória cultural incômoda demais pra caber na narrativa de progresso da época. Historiadores da ciência convencionais rejeitam essa leitura: veem a obra de Cuvier como um avanço legítimo da biologia, não uma operação de encobrimento.',
+   'Documentado desde a Antiguidade (Plínio, o Velho, 77 d.C.) — praticamente toda civilização antiga registrou uma versão equivalente', 'Predador de grande porte, frequentemente associado à água ou a cavernas', 'muito_alta', 4, 'alto, segundo os relatos antigos', 2, true)
+on conflict (slug) do update set
+  descricao = excluded.descricao,
+  teoria_conspiracao = excluded.teoria_conspiracao;

@@ -43,6 +43,7 @@
     <div class="logo"><span class="dot"></span>Arquivo <span>X-BR</span></div>
     <nav class="admin-nav">
       <button data-view="entidades" class="active">Entidades</button>
+      <button data-view="criptideos">Criptídeos</button>
       <button data-view="casos">Linha do tempo</button>
       <button data-view="historicos">Camada histórica</button>
     </nav>
@@ -73,6 +74,34 @@
             </tr>
           </thead>
           <tbody id="entidadesTbody">
+            <tr><td colspan="6" class="empty-state">Carregando...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ---------- View: Criptídeos ---------- -->
+    <section id="view-criptideos" hidden>
+      <div class="admin-header">
+        <div>
+          <h2>Criptídeos</h2>
+          <p>Animais criptídeos. Publicados aparecem na seção "Animais criptídeos" do site.</p>
+        </div>
+        <button class="btn btn-primary" id="newCriptideoBtn">+ Novo criptídeo</button>
+      </div>
+      <div class="admin-table-wrap">
+        <table class="admin-table" id="criptideosTable">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Caso nº</th>
+              <th>Ameaça</th>
+              <th>Status</th>
+              <th>Ordem</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="criptideosTbody">
             <tr><td colspan="6" class="empty-state">Carregando...</td></tr>
           </tbody>
         </table>
@@ -304,6 +333,89 @@
       <p class="form-error" id="historicoError">Erro ao salvar. Confira o slug (precisa ser único).</p>
       <div class="modal-actions">
         <button type="button" class="btn btn-ghost" id="historicoCancelBtn">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Salvar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ---------- Modal: editar/criar criptídeo ---------- -->
+<div class="admin-modal-backdrop" id="criptideoModal" hidden>
+  <div class="admin-modal">
+    <h3 id="criptideoModalTitle">Novo criptídeo</h3>
+    <form id="criptideoForm">
+      <input type="hidden" id="criptideoId">
+      <div class="field">
+        <label for="criptideoNome">Nome</label>
+        <input type="text" id="criptideoNome" required placeholder="ex: Dragões">
+      </div>
+      <div class="field">
+        <label for="criptideoSlug">Slug (URL)</label>
+        <input type="text" id="criptideoSlug" required placeholder="ex: dragoes">
+      </div>
+      <div class="field">
+        <label for="criptideoApelido">Apelido</label>
+        <input type="text" id="criptideoApelido" placeholder='ex: "O predador que toda civilização antiga descreveu"'>
+      </div>
+      <div class="field">
+        <label for="criptideoCasoNumero">Número do caso (ficha)</label>
+        <input type="text" id="criptideoCasoNumero" placeholder="ex: 0120">
+      </div>
+      <div class="field">
+        <label for="criptideoDescricao">Descrição</label>
+        <textarea id="criptideoDescricao" style="min-height:140px;" placeholder="A leitura alternativa, e também a leitura convencional (zoologia, paleontologia, folclore)."></textarea>
+      </div>
+      <div class="field">
+        <label for="criptideoConspiracao">Teoria da conspiração (opcional)</label>
+        <textarea id="criptideoConspiracao" style="min-height:120px;" placeholder="Só preencha se existir uma teoria de encobrimento/supressão documentada. Deixe em branco se não houver."></textarea>
+      </div>
+      <div class="field">
+        <label for="criptideoPrimeiroRelato">Primeiro relato</label>
+        <input type="text" id="criptideoPrimeiroRelato" placeholder="ex: Documentado desde a Antiguidade...">
+      </div>
+      <div class="field">
+        <label for="criptideoComportamento">Comportamento</label>
+        <input type="text" id="criptideoComportamento" placeholder="ex: Predador de grande porte, associado à água">
+      </div>
+      <div class="field">
+        <label for="criptideoOcorrencia">Ocorrência</label>
+        <select id="criptideoOcorrencia">
+          <option value="muito_alta">Muito alta</option>
+          <option value="alta">Alta</option>
+          <option value="moderada">Moderada</option>
+          <option value="baixa">Baixa</option>
+          <option value="rara">Rara</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="criptideoAmeaca">Nível de ameaça relatado (0 a 5)</label>
+        <input type="number" id="criptideoAmeaca" min="0" max="5" value="0">
+      </div>
+      <div class="field">
+        <label for="criptideoAmeacaLabel">Legenda do nível de ameaça</label>
+        <input type="text" id="criptideoAmeacaLabel" placeholder="ex: alto, segundo os relatos antigos">
+      </div>
+      <div class="field">
+        <label for="criptideoImagemFile">Imagem (upload)</label>
+        <input type="file" id="criptideoImagemFile" accept="image/*">
+        <div id="criptideoImagemPreview" class="image-preview"></div>
+        <p class="field-hint" id="criptideoImagemStatus"></p>
+      </div>
+      <div class="field">
+        <label for="criptideoImagem">URL da imagem</label>
+        <input type="text" id="criptideoImagem" placeholder="preenchido automaticamente após o upload, ou cole um link direto">
+      </div>
+      <div class="field">
+        <label for="criptideoOrdem">Ordem</label>
+        <input type="number" id="criptideoOrdem" value="0">
+      </div>
+      <div class="field checkbox-row">
+        <input type="checkbox" id="criptideoPublicado">
+        <label for="criptideoPublicado" style="margin:0;">Publicado</label>
+      </div>
+      <p class="form-error" id="criptideoError">Erro ao salvar. Confira o slug (precisa ser único).</p>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" id="criptideoCancelBtn">Cancelar</button>
         <button type="submit" class="btn btn-primary">Salvar</button>
       </div>
     </form>

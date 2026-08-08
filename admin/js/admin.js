@@ -42,6 +42,7 @@ function showShell() {
   loginScreen.hidden = true;
   adminShell.hidden = false;
   loadEntidades();
+  loadCriptideos();
   loadCasos();
   loadHistoricos();
 }
@@ -82,7 +83,7 @@ navButtons.forEach(btn => {
   btn.addEventListener('click', () => {
     navButtons.forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-    ['entidades', 'casos', 'historicos'].forEach(v => {
+    ['entidades', 'criptideos', 'casos', 'historicos'].forEach(v => {
       document.getElementById(`view-${v}`).hidden = (v !== btn.dataset.view);
     });
   });
@@ -373,6 +374,169 @@ casoForm.addEventListener('submit', async (e) => {
   }
   casoModal.hidden = true;
   loadCasos();
+});
+
+// ===================================================================
+// CRIPTÍDEOS
+// ===================================================================
+
+const criptideoModal = document.getElementById('criptideoModal');
+const criptideoForm = document.getElementById('criptideoForm');
+const criptideoError = document.getElementById('criptideoError');
+
+async function loadCriptideos() {
+  const tbody = document.getElementById('criptideosTbody');
+  const { data, error } = await sb.from('criptideos').select('*').order('ordem', { ascending: true });
+
+  if (error) {
+    tbody.innerHTML = `<tr><td colspan="6" class="empty-state">Erro ao carregar: ${error.message}</td></tr>`;
+    return;
+  }
+  if (!data || data.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="6" class="empty-state">Nenhum criptídeo cadastrado ainda.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = data.map(c => `
+    <tr>
+      <td><strong>${escapeHtml(c.nome)}</strong></td>
+      <td>${escapeHtml(c.caso_numero || '—')}</td>
+      <td>${threatBars(c.nivel_ameaca)}</td>
+      <td><span class="badge ${c.publicado ? 'badge-on' : 'badge-off'}">${c.publicado ? 'Publicado' : 'Rascunho'}</span></td>
+      <td>${c.ordem ?? 0}</td>
+      <td>
+        <div class="row-actions">
+          <button data-id="${c.id}" class="editCriptideo">Editar</button>
+          <button data-id="${c.id}" class="danger deleteCriptideo">Excluir</button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+
+  tbody.querySelectorAll('.editCriptideo').forEach(b => b.addEventListener('click', () => editCriptideo(b.dataset.id, data)));
+  tbody.querySelectorAll('.deleteCriptideo').forEach(b => b.addEventListener('click', () => deleteCriptideo(b.dataset.id)));
+}
+
+function openCriptideoModal(title) {
+  document.getElementById('criptideoModalTitle').textContent = title;
+  criptideoError.classList.remove('show');
+  criptideoModal.hidden = false;
+}
+
+function renderCriptideoImagemPreview(url) {
+  const box = document.getElementById('criptideoImagemPreview');
+  box.innerHTML = url ? `<img src="${url}" alt="Prévia da imagem">` : '';
+}
+
+document.getElementById('criptideoImagemFile').addEventListener('change', async (ev) => {
+  const file = ev.target.files[0];
+  const status = document.getElementById('criptideoImagemStatus');
+  if (!file) return;
+
+  status.textContent = 'Enviando...';
+  status.classList.remove('error');
+
+  const ext = file.name.split('.').pop();
+  const path = `criptideos/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+
+  const { error: uploadError } = await sb.storage.from('imagens').upload(path, file, {
+    cacheControl: '3600',
+    upsert: false
+  });
+
+  if (uploadError) {
+    status.textContent = 'Erro no upload: ' + uploadError.message;
+    status.classList.add('error');
+    return;
+  }
+
+  const { data: urlData } = sb.storage.from('imagens').getPublicUrl(path);
+  document.getElementById('criptideoImagem').value = urlData.publicUrl;
+  renderCriptideoImagemPreview(urlData.publicUrl);
+  status.textContent = 'Upload concluído.';
+});
+
+document.getElementById('criptideoImagem').addEventListener('change', (ev) => {
+  renderCriptideoImagemPreview(ev.target.value.trim());
+});
+
+document.getElementById('newCriptideoBtn').addEventListener('click', () => {
+  criptideoForm.reset();
+  document.getElementById('criptideoId').value = '';
+  document.getElementById('criptideoOcorrencia').value = 'moderada';
+  document.getElementById('criptideoImagemStatus').textContent = '';
+  renderCriptideoImagemPreview('');
+  openCriptideoModal('Novo criptídeo');
+});
+
+document.getElementById('criptideoCancelBtn').addEventListener('click', () => criptideoModal.hidden = true);
+enableEnterToSubmit(criptideoForm);
+
+function editCriptideo(id, data) {
+  const c = data.find(x => x.id === id);
+  if (!c) return;
+  document.getElementById('criptideoId').value = c.id;
+  document.getElementById('criptideoNome').value = c.nome || '';
+  document.getElementById('criptideoSlug').value = c.slug || '';
+  document.getElementById('criptideoApelido').value = c.apelido || '';
+  document.getElementById('criptideoCasoNumero').value = c.caso_numero || '';
+  document.getElementById('criptideoDescricao').value = c.descricao || '';
+  document.getElementById('criptideoConspiracao').value = c.teoria_conspiracao || '';
+  document.getElementById('criptideoPrimeiroRelato').value = c.primeiro_relato || '';
+  document.getElementById('criptideoComportamento').value = c.comportamento || '';
+  document.getElementById('criptideoOcorrencia').value = c.ocorrencia || 'moderada';
+  document.getElementById('criptideoAmeaca').value = c.nivel_ameaca ?? 0;
+  document.getElementById('criptideoAmeacaLabel').value = c.nivel_ameaca_label || '';
+  document.getElementById('criptideoImagem').value = c.imagem_url || '';
+  document.getElementById('criptideoImagemStatus').textContent = '';
+  renderCriptideoImagemPreview(c.imagem_url || '');
+  document.getElementById('criptideoOrdem').value = c.ordem ?? 0;
+  document.getElementById('criptideoPublicado').checked = !!c.publicado;
+  openCriptideoModal('Editar criptídeo');
+}
+
+async function deleteCriptideo(id) {
+  if (!confirm('Excluir este criptídeo? Essa ação não pode ser desfeita.')) return;
+  const { error } = await sb.from('criptideos').delete().eq('id', id);
+  if (error) { alert('Erro ao excluir: ' + error.message); return; }
+  loadCriptideos();
+}
+
+criptideoForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  criptideoError.classList.remove('show');
+
+  const id = document.getElementById('criptideoId').value;
+  const payload = {
+    nome: document.getElementById('criptideoNome').value.trim(),
+    slug: document.getElementById('criptideoSlug').value.trim(),
+    apelido: document.getElementById('criptideoApelido').value.trim() || null,
+    caso_numero: document.getElementById('criptideoCasoNumero').value.trim() || null,
+    descricao: document.getElementById('criptideoDescricao').value.trim() || null,
+    teoria_conspiracao: document.getElementById('criptideoConspiracao').value.trim() || null,
+    primeiro_relato: document.getElementById('criptideoPrimeiroRelato').value.trim() || null,
+    comportamento: document.getElementById('criptideoComportamento').value.trim() || null,
+    ocorrencia: document.getElementById('criptideoOcorrencia').value,
+    nivel_ameaca: parseInt(document.getElementById('criptideoAmeaca').value, 10) || 0,
+    nivel_ameaca_label: document.getElementById('criptideoAmeacaLabel').value.trim() || null,
+    imagem_url: document.getElementById('criptideoImagem').value.trim() || null,
+    ordem: parseInt(document.getElementById('criptideoOrdem').value, 10) || 0,
+    publicado: document.getElementById('criptideoPublicado').checked,
+    atualizado_em: new Date().toISOString()
+  };
+
+  const query = id
+    ? sb.from('criptideos').update(payload).eq('id', id)
+    : sb.from('criptideos').insert(payload);
+
+  const { error } = await query;
+  if (error) {
+    criptideoError.textContent = 'Erro ao salvar: ' + error.message;
+    criptideoError.classList.add('show');
+    return;
+  }
+  criptideoModal.hidden = true;
+  loadCriptideos();
 });
 
 // ===================================================================
