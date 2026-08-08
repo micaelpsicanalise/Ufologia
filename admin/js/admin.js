@@ -9,8 +9,8 @@
 // manualmente se você tiver mais de um lugar usando o mesmo projeto.
 // ===================================================================
 
-const SUPABASE_URL = 'https://SEU-PROJETO.supabase.co';
-const SUPABASE_ANON_KEY = 'SUA_ANON_KEY';
+const SUPABASE_URL = 'https://aewcxqzpbipwcdpsjfht.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_mINpOQLVbi0pilHc9bEtBA_l1a0o6c6';
 
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
   db: { schema: 'ufologia' }
@@ -57,6 +57,17 @@ loginForm.addEventListener('submit', async (e) => {
     return;
   }
   showShell();
+});
+
+// reforço: garante que Enter nos campos de login sempre dispara o submit,
+// mesmo se o navegador (autofill, extensões etc.) interceptar o Enter nativo.
+['loginEmail', 'loginPassword'].forEach(id => {
+  document.getElementById(id).addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      loginForm.requestSubmit();
+    }
+  });
 });
 
 logoutBtn.addEventListener('click', async () => {
@@ -184,6 +195,7 @@ document.getElementById('newEntidadeBtn').addEventListener('click', () => {
 });
 
 document.getElementById('entidadeCancelBtn').addEventListener('click', () => entidadeModal.hidden = true);
+enableEnterToSubmit(entidadeForm);
 
 // se alguém colar um link direto na URL, atualiza a prévia também
 document.getElementById('entidadeImagem').addEventListener('change', (ev) => {
@@ -309,6 +321,7 @@ document.getElementById('newCasoBtn').addEventListener('click', () => {
 });
 
 document.getElementById('casoCancelBtn').addEventListener('click', () => casoModal.hidden = true);
+enableEnterToSubmit(casoForm);
 
 function editCaso(id, data) {
   const c = data.find(x => x.id === id);
@@ -366,6 +379,19 @@ function escapeHtml(str) {
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;');
+}
+
+// reforço: Enter em qualquer input de texto de um form dispara o submit
+// (exceto dentro de textarea, onde Enter deve continuar quebrando linha).
+function enableEnterToSubmit(form) {
+  form.querySelectorAll('input').forEach(input => {
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        form.requestSubmit();
+      }
+    });
+  });
 }
 
 // ---------- Boot ----------
