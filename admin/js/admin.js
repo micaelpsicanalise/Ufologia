@@ -9,8 +9,8 @@
 // manualmente se você tiver mais de um lugar usando o mesmo projeto.
 // ===================================================================
 
-const SUPABASE_URL = 'https://aewcxqzpbipwcdpsjfht.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_mINpOQLVbi0pilHc9bEtBA_l1a0o6c6';
+const SUPABASE_URL = 'https://SEU-PROJETO.supabase.co';
+const SUPABASE_ANON_KEY = 'SUA_ANON_KEY';
 
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
   db: { schema: 'ufologia' }
@@ -140,14 +140,55 @@ function openEntidadeModal(title) {
   entidadeModal.hidden = false;
 }
 
+function renderImagemPreview(url) {
+  const box = document.getElementById('entidadeImagemPreview');
+  box.innerHTML = url ? `<img src="${url}" alt="Prévia da imagem">` : '';
+}
+
+// upload pro bucket "imagens" assim que o arquivo é escolhido
+document.getElementById('entidadeImagemFile').addEventListener('change', async (ev) => {
+  const file = ev.target.files[0];
+  const status = document.getElementById('entidadeImagemStatus');
+  if (!file) return;
+
+  status.textContent = 'Enviando...';
+  status.classList.remove('error');
+
+  const ext = file.name.split('.').pop();
+  const path = `entidades/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+
+  const { error: uploadError } = await sb.storage.from('imagens').upload(path, file, {
+    cacheControl: '3600',
+    upsert: false
+  });
+
+  if (uploadError) {
+    status.textContent = 'Erro no upload: ' + uploadError.message;
+    status.classList.add('error');
+    return;
+  }
+
+  const { data: urlData } = sb.storage.from('imagens').getPublicUrl(path);
+  document.getElementById('entidadeImagem').value = urlData.publicUrl;
+  renderImagemPreview(urlData.publicUrl);
+  status.textContent = 'Upload concluído.';
+});
+
 document.getElementById('newEntidadeBtn').addEventListener('click', () => {
   entidadeForm.reset();
   document.getElementById('entidadeId').value = '';
   document.getElementById('entidadeOcorrencia').value = 'moderada';
+  document.getElementById('entidadeImagemStatus').textContent = '';
+  renderImagemPreview('');
   openEntidadeModal('Nova entidade');
 });
 
 document.getElementById('entidadeCancelBtn').addEventListener('click', () => entidadeModal.hidden = true);
+
+// se alguém colar um link direto na URL, atualiza a prévia também
+document.getElementById('entidadeImagem').addEventListener('change', (ev) => {
+  renderImagemPreview(ev.target.value.trim());
+});
 
 function editEntidade(id, data) {
   const e = data.find(x => x.id === id);
@@ -164,6 +205,8 @@ function editEntidade(id, data) {
   document.getElementById('entidadeAmeaca').value = e.nivel_ameaca ?? 0;
   document.getElementById('entidadeAmeacaLabel').value = e.nivel_ameaca_label || '';
   document.getElementById('entidadeImagem').value = e.imagem_url || '';
+  document.getElementById('entidadeImagemStatus').textContent = '';
+  renderImagemPreview(e.imagem_url || '');
   document.getElementById('entidadeOrdem').value = e.ordem ?? 0;
   document.getElementById('entidadePublicado').checked = !!e.publicado;
   openEntidadeModal('Editar entidade');
