@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="pageTitle">Ficha da entidade — ARQUIVO X-BR</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-0:#080b0f;
+    --bg-1:#0d1218;
+    --bg-2:#121820;
+    --line:#233040;
+    --line-soft:#1a232d;
+    --phosphor:#4fe3a8;
+    --phosphor-dim:#2c8a67;
+    --amber:#e2a23b;
+    --redact:#0a0a0a;
+    --stamp:#c1443a;
+    --text:#d6e2df;
+    --text-dim:#8296a0;
+    --text-faint:#4c5a63;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg-0);
+    color:var(--text);
+    font-family:'IBM Plex Mono', monospace;
+    line-height:1.6;
+    overflow-x:hidden;
+    min-height:100vh;
+  }
+  ::selection{background:var(--phosphor); color:#04120b;}
+
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    background:repeating-linear-gradient(
+      to bottom,
+      rgba(255,255,255,0.018) 0px,
+      rgba(255,255,255,0.018) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+    pointer-events:none;
+    z-index:9999;
+    mix-blend-mode:overlay;
+  }
+  body::after{
+    content:"";
+    position:fixed; inset:0;
+    background:radial-gradient(ellipse at 50% 0%, rgba(79,227,168,0.05), transparent 60%);
+    pointer-events:none;
+    z-index:1;
+  }
+
+  .wrap{max-width:900px; margin:0 auto; padding:0 28px; position:relative; z-index:2;}
+
+  /* ---------- TOP BAR ---------- */
+  header.topbar{
+    position:sticky; top:0; z-index:100;
+    background:rgba(8,11,15,0.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+  .topbar-inner{
+    max-width:900px; margin:0 auto; padding:14px 28px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .brand{
+    font-family:'Oswald', sans-serif;
+    font-weight:700;
+    letter-spacing:0.14em;
+    font-size:15px;
+    color:var(--phosphor);
+    display:flex; align-items:center; gap:10px;
+    text-decoration:none;
+  }
+  .brand .dot{
+    width:7px; height:7px; border-radius:50%;
+    background:var(--stamp);
+    box-shadow:0 0 8px var(--stamp);
+    animation:blink 2.4s infinite;
+  }
+  @keyframes blink{0%,100%{opacity:1;}50%{opacity:0.25;}}
+  nav.toplinks{display:flex; gap:26px; font-size:11px; letter-spacing:0.08em; color:var(--text-dim);}
+  nav.toplinks a{color:var(--text-dim); text-decoration:none; text-transform:uppercase;}
+  nav.toplinks a:hover{color:var(--phosphor);}
+  @media (max-width:640px){nav.toplinks{display:none;}}
+
+  /* ---------- BACK LINK ---------- */
+  .back-link{
+    display:inline-flex; align-items:center; gap:8px;
+    color:var(--text-dim); text-decoration:none;
+    font-size:12px; text-transform:uppercase; letter-spacing:0.06em;
+    margin:32px 0 24px;
+  }
+  .back-link:hover{color:var(--phosphor);}
+
+  /* ---------- DETAIL ---------- */
+  .detail-head{margin-bottom:28px;}
+  .case-stamp{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:11px; letter-spacing:0.1em; text-transform:uppercase;
+    color:var(--amber); border:1px solid rgba(226,162,59,0.4);
+    padding:5px 12px; margin-bottom:18px;
+  }
+  h1.detail-title{
+    font-family:'Oswald', sans-serif; font-weight:700;
+    font-size:clamp(32px, 5vw, 52px);
+    text-transform:uppercase;
+    color:#eef4f2;
+    line-height:1.02;
+  }
+  .detail-also{
+    color:var(--text-faint); font-style:italic; margin-top:10px; font-size:14px;
+  }
+  .detail-img{
+    margin:28px 0; border:1px solid var(--line); overflow:hidden;
+  }
+  .detail-img img{width:100%; max-height:340px; object-fit:cover; display:block; filter:grayscale(0.3) contrast(1.05);}
+
+  .detail-desc{
+    font-size:15px; color:var(--text-dim); max-width:680px; margin-bottom:36px;
+  }
+
+  .detail-stats{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+    margin-bottom:36px;
+  }
+  .detail-stat{background:var(--bg-1); padding:18px 20px;}
+  .detail-stat span{display:block;}
+  .detail-stat .label{font-size:10px; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-faint); margin-bottom:6px;}
+  .detail-stat .value{font-size:14px; color:var(--text);}
+
+  .detail-threat{
+    background:var(--bg-1); border:1px solid var(--line);
+    padding:22px; margin-bottom:48px;
+  }
+  .detail-threat .label{font-size:10px; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-faint); margin-bottom:12px;}
+  .threat-bars-lg{display:flex; gap:5px; margin-bottom:10px;}
+  .threat-bars-lg i{width:36px; height:8px; background:var(--line); display:inline-block;}
+  .threat-bars-lg i.on{background:var(--stamp);}
+  .detail-threat .desc{font-size:13px; color:var(--text-dim);}
+
+  .redacted{background:var(--redact); color:var(--redact); padding:0 4px; border-radius:1px; user-select:none;}
+
+  /* ---------- PREV/NEXT ---------- */
+  .detail-nav{
+    display:grid; grid-template-columns:1fr 1fr; gap:16px;
+    border-top:1px solid var(--line-soft); padding-top:28px; margin-bottom:60px;
+  }
+  .detail-nav a{
+    display:block; text-decoration:none; color:var(--text-dim);
+    border:1px solid var(--line); padding:16px 18px;
+    font-size:12px;
+  }
+  .detail-nav a:hover{border-color:var(--phosphor-dim); color:var(--text);}
+  .detail-nav .dir{font-size:10px; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-faint); display:block; margin-bottom:6px;}
+  .detail-nav .next{text-align:right;}
+
+  .empty-msg{color:var(--text-faint); font-size:14px; padding:60px 0; text-align:center;}
+
+  footer{
+    border-top:1px solid var(--line-soft);
+    padding:32px 0 50px;
+    font-size:11px; color:var(--text-faint);
+  }
+  footer a{color:var(--phosphor-dim);}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="brand"><span class="dot"></span>ARQUIVO X-BR</a>
+    <nav class="toplinks">
+      <a href="index.html#entidades">Entidades</a>
+      <a href="index.html#linha-do-tempo">Linha do tempo</a>
+      <a href="index.html#vallee">Jacques Vallée</a>
+      <a href="index.html#dimensoes">Dimensões</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <a href="index.html#entidades" class="back-link">← Voltar ao dossiê</a>
+
+  <div id="content">
+    <p class="empty-msg">Carregando ficha...</p>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">Compilação não oficial · relatos de folclore ufológico, sem confirmação científica.</div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = 'https://aewcxqzpbipwcdpsjfht.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_mINpOQLVbi0pilHc9bEtBA_l1a0o6c6';
+
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+    db: { schema: 'ufologia' }
+  });
+
+  const OCORRENCIA_LABEL = {
+    muito_alta: 'Muito alta',
+    alta: 'Alta',
+    moderada: 'Moderada',
+    baixa: 'Baixa',
+    rara: 'Rara'
+  };
+
+  function esc(str) {
+    if (str == null) return '';
+    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  function threatBarsLg(n) {
+    n = Math.max(0, Math.min(5, parseInt(n, 10) || 0));
+    let html = '';
+    for (let i = 0; i < 5; i++) html += `<i class="${i < n ? 'on' : ''}"></i>`;
+    return html;
+  }
+
+  async function loadEntidade() {
+    const params = new URLSearchParams(window.location.search);
+    const slug = params.get('slug');
+    const content = document.getElementById('content');
+
+    if (!slug) {
+      content.innerHTML = '<p class="empty-msg">Nenhum registro especificado.</p>';
+      return;
+    }
+
+    const { data: all, error } = await sb
+      .from('entidades')
+      .select('*')
+      .eq('publicado', true)
+      .order('ordem', { ascending: true });
+
+    if (error || !all || all.length === 0) {
+      content.innerHTML = '<p class="empty-msg">Não foi possível carregar o dossiê agora.</p>';
+      return;
+    }
+
+    const idx = all.findIndex(e => e.slug === slug);
+    if (idx === -1) {
+      content.innerHTML = '<p class="empty-msg">Registro não encontrado ou não publicado.</p>';
+      return;
+    }
+
+    const e = all[idx];
+    const prev = all[(idx - 1 + all.length) % all.length];
+    const next = all[(idx + 1) % all.length];
+
+    document.getElementById('pageTitle').textContent = `${e.nome} — ARQUIVO X-BR`;
+
+    content.innerHTML = `
+      <div class="detail-head">
+        <span class="case-stamp">● Caso Nº ${esc(e.caso_numero || '—')}</span>
+        <h1 class="detail-title">${esc(e.nome)}</h1>
+        ${e.apelido ? `<div class="detail-also">${esc(e.apelido)}</div>` : ''}
+      </div>
+
+      ${e.imagem_url ? `<div class="detail-img"><img src="${esc(e.imagem_url)}" alt="${esc(e.nome)}"></div>` : ''}
+
+      <p class="detail-desc">${esc(e.descricao || 'Sem descrição registrada.')}</p>
+
+      <div class="detail-stats">
+        <div class="detail-stat"><span class="label">Primeiro relato</span><span class="value">${esc(e.primeiro_relato || '—')}</span></div>
+        <div class="detail-stat"><span class="label">Comportamento</span><span class="value">${esc(e.comportamento || '—')}</span></div>
+        <div class="detail-stat"><span class="label">Ocorrência</span><span class="value">${esc(OCORRENCIA_LABEL[e.ocorrencia] || e.ocorrencia || '—')}</span></div>
+      </div>
+
+      <div class="detail-threat">
+        <span class="label">Nível de ameaça relatado</span>
+        <div class="threat-bars-lg">${threatBarsLg(e.nivel_ameaca)}</div>
+        <div class="desc">${esc(e.nivel_ameaca_label || 'não especificado')} — impressão subjetiva de testemunhas, sem qualquer verificação.</div>
+      </div>
+
+      <div class="detail-nav">
+        <a href="entidade.html?slug=${encodeURIComponent(prev.slug)}" class="prev">
+          <span class="dir">← Anterior</span>${esc(prev.nome)}
+        </a>
+        <a href="entidade.html?slug=${encodeURIComponent(next.slug)}" class="next">
+          <span class="dir">Próxima →</span>${esc(next.nome)}
+        </a>
+      </div>
+    `;
+  }
+
+  loadEntidade();
+</script>
+
+</body>
+</html>

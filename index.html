@@ -186,6 +186,10 @@
     position:relative;
     padding:22px 22px 20px;
     transition:border-color 0.25s ease, transform 0.25s ease;
+    display:block;
+    text-decoration:none;
+    color:inherit;
+    cursor:pointer;
   }
   .card:hover{border-color:var(--phosphor-dim); transform:translateY(-3px);}
   .card::before{
@@ -590,7 +594,7 @@
     }
 
     grid.innerHTML = data.map(e => `
-      <div class="card" data-case="${esc(e.caso_numero || '')}">
+      <a class="card" data-case="${esc(e.caso_numero || '')}" href="entidade.html?slug=${encodeURIComponent(e.slug)}">
         ${e.imagem_url ? `<div class="card-img"><img src="${esc(e.imagem_url)}" alt="${esc(e.nome)}"></div>` : ''}
         <div class="card-head"><h3>${esc(e.nome)}</h3></div>
         <div class="also">${esc(e.apelido || '')}</div>
@@ -602,7 +606,7 @@
         </div>
         <div class="threat">${threatBars(e.nivel_ameaca)}</div>
         <div class="threat-label">Nível de ameaça relatado: ${esc(e.nivel_ameaca_label || '—')}</div>
-      </div>
+      </a>
     `).join('');
   }
 
