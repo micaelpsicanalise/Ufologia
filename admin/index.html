@@ -44,6 +44,7 @@
     <nav class="admin-nav">
       <button data-view="entidades" class="active">Entidades</button>
       <button data-view="casos">Linha do tempo</button>
+      <button data-view="historicos">Camada histórica</button>
     </nav>
     <button class="admin-logout" id="logoutBtn">Sair</button>
   </aside>
@@ -100,6 +101,34 @@
           </thead>
           <tbody id="casosTbody">
             <tr><td colspan="5" class="empty-state">Carregando...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ---------- View: Camada histórica ---------- -->
+    <section id="view-historicos" hidden>
+      <div class="admin-header">
+        <div>
+          <h2>Camada histórica</h2>
+          <p>Relatos históricos e pré-históricos. Publicados aparecem em "Relatos históricos e pré-históricos" no site.</p>
+        </div>
+        <button class="btn btn-primary" id="newHistoricoBtn">+ Novo relato</button>
+      </div>
+      <div class="admin-table-wrap">
+        <table class="admin-table" id="historicosTable">
+          <thead>
+            <tr>
+              <th>Período</th>
+              <th>Título</th>
+              <th>Era</th>
+              <th>Status</th>
+              <th>Ordem</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="historicosTbody">
+            <tr><td colspan="6" class="empty-state">Carregando...</td></tr>
           </tbody>
         </table>
       </div>
@@ -220,6 +249,53 @@
       <p class="form-error" id="casoError">Erro ao salvar. Confira o slug (precisa ser único).</p>
       <div class="modal-actions">
         <button type="button" class="btn btn-ghost" id="casoCancelBtn">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Salvar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ---------- Modal: editar/criar relato histórico ---------- -->
+<div class="admin-modal-backdrop" id="historicoModal" hidden>
+  <div class="admin-modal">
+    <h3 id="historicoModalTitle">Novo relato</h3>
+    <form id="historicoForm">
+      <input type="hidden" id="historicoId">
+      <div class="field">
+        <label for="historicoEra">Era</label>
+        <input type="text" id="historicoEra" required placeholder="ex: Pré-história, Antiguidade, Idade Média...">
+      </div>
+      <div class="field">
+        <label for="historicoTitulo">Título</label>
+        <input type="text" id="historicoTitulo" required placeholder="ex: A roda de Ezequiel">
+      </div>
+      <div class="field">
+        <label for="historicoSlug">Slug (URL)</label>
+        <input type="text" id="historicoSlug" required placeholder="ex: roda-de-ezequiel">
+      </div>
+      <div class="field">
+        <label for="historicoPeriodo">Período (data aproximada)</label>
+        <input type="text" id="historicoPeriodo" placeholder="ex: ~593 a.C., 1561, ~10.000 a.C.">
+      </div>
+      <div class="field">
+        <label for="historicoLocal">Local</label>
+        <input type="text" id="historicoLocal" placeholder="ex: Nuremberg, Sacro Império Romano-Germânico">
+      </div>
+      <div class="field">
+        <label for="historicoDescricao">Descrição</label>
+        <textarea id="historicoDescricao" style="min-height:140px;" placeholder="A leitura alternativa, e também a leitura convencional (arqueológica, teológica, histórica)."></textarea>
+      </div>
+      <div class="field">
+        <label for="historicoOrdem">Ordem (cronológica)</label>
+        <input type="number" id="historicoOrdem" value="0">
+      </div>
+      <div class="field checkbox-row">
+        <input type="checkbox" id="historicoPublicado">
+        <label for="historicoPublicado" style="margin:0;">Publicado</label>
+      </div>
+      <p class="form-error" id="historicoError">Erro ao salvar. Confira o slug (precisa ser único).</p>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" id="historicoCancelBtn">Cancelar</button>
         <button type="submit" class="btn btn-primary">Salvar</button>
       </div>
     </form>

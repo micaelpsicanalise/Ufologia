@@ -43,6 +43,7 @@ function showShell() {
   adminShell.hidden = false;
   loadEntidades();
   loadCasos();
+  loadHistoricos();
 }
 
 loginForm.addEventListener('submit', async (e) => {
@@ -81,7 +82,7 @@ navButtons.forEach(btn => {
   btn.addEventListener('click', () => {
     navButtons.forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-    ['entidades', 'casos'].forEach(v => {
+    ['entidades', 'casos', 'historicos'].forEach(v => {
       document.getElementById(`view-${v}`).hidden = (v !== btn.dataset.view);
     });
   });
@@ -370,6 +371,115 @@ casoForm.addEventListener('submit', async (e) => {
   }
   casoModal.hidden = true;
   loadCasos();
+});
+
+// ===================================================================
+// RELATOS HISTÓRICOS
+// ===================================================================
+
+const historicoModal = document.getElementById('historicoModal');
+const historicoForm = document.getElementById('historicoForm');
+const historicoError = document.getElementById('historicoError');
+
+async function loadHistoricos() {
+  const tbody = document.getElementById('historicosTbody');
+  const { data, error } = await sb.from('relatos_historicos').select('*').order('ordem', { ascending: true });
+
+  if (error) {
+    tbody.innerHTML = `<tr><td colspan="6" class="empty-state">Erro ao carregar: ${error.message}</td></tr>`;
+    return;
+  }
+  if (!data || data.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="6" class="empty-state">Nenhum relato cadastrado ainda.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = data.map(h => `
+    <tr>
+      <td><strong>${escapeHtml(h.periodo || '—')}</strong></td>
+      <td>${escapeHtml(h.titulo)}</td>
+      <td>${escapeHtml(h.era)}</td>
+      <td><span class="badge ${h.publicado ? 'badge-on' : 'badge-off'}">${h.publicado ? 'Publicado' : 'Rascunho'}</span></td>
+      <td>${h.ordem ?? 0}</td>
+      <td>
+        <div class="row-actions">
+          <button data-id="${h.id}" class="editHistorico">Editar</button>
+          <button data-id="${h.id}" class="danger deleteHistorico">Excluir</button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+
+  tbody.querySelectorAll('.editHistorico').forEach(b => b.addEventListener('click', () => editHistorico(b.dataset.id, data)));
+  tbody.querySelectorAll('.deleteHistorico').forEach(b => b.addEventListener('click', () => deleteHistorico(b.dataset.id)));
+}
+
+function openHistoricoModal(title) {
+  document.getElementById('historicoModalTitle').textContent = title;
+  historicoError.classList.remove('show');
+  historicoModal.hidden = false;
+}
+
+document.getElementById('newHistoricoBtn').addEventListener('click', () => {
+  historicoForm.reset();
+  document.getElementById('historicoId').value = '';
+  openHistoricoModal('Novo relato');
+});
+
+document.getElementById('historicoCancelBtn').addEventListener('click', () => historicoModal.hidden = true);
+enableEnterToSubmit(historicoForm);
+
+function editHistorico(id, data) {
+  const h = data.find(x => x.id === id);
+  if (!h) return;
+  document.getElementById('historicoId').value = h.id;
+  document.getElementById('historicoEra').value = h.era || '';
+  document.getElementById('historicoTitulo').value = h.titulo || '';
+  document.getElementById('historicoSlug').value = h.slug || '';
+  document.getElementById('historicoPeriodo').value = h.periodo || '';
+  document.getElementById('historicoLocal').value = h.local || '';
+  document.getElementById('historicoDescricao').value = h.descricao || '';
+  document.getElementById('historicoOrdem').value = h.ordem ?? 0;
+  document.getElementById('historicoPublicado').checked = !!h.publicado;
+  openHistoricoModal('Editar relato');
+}
+
+async function deleteHistorico(id) {
+  if (!confirm('Excluir este relato? Essa ação não pode ser desfeita.')) return;
+  const { error } = await sb.from('relatos_historicos').delete().eq('id', id);
+  if (error) { alert('Erro ao excluir: ' + error.message); return; }
+  loadHistoricos();
+}
+
+historicoForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  historicoError.classList.remove('show');
+
+  const id = document.getElementById('historicoId').value;
+  const payload = {
+    era: document.getElementById('historicoEra').value.trim(),
+    titulo: document.getElementById('historicoTitulo').value.trim(),
+    slug: document.getElementById('historicoSlug').value.trim(),
+    periodo: document.getElementById('historicoPeriodo').value.trim() || null,
+    local: document.getElementById('historicoLocal').value.trim() || null,
+    descricao: document.getElementById('historicoDescricao').value.trim() || null,
+    ordem: parseInt(document.getElementById('historicoOrdem').value, 10) || 0,
+    publicado: document.getElementById('historicoPublicado').checked,
+    atualizado_em: new Date().toISOString()
+  };
+
+  const query = id
+    ? sb.from('relatos_historicos').update(payload).eq('id', id)
+    : sb.from('relatos_historicos').insert(payload);
+
+  const { error } = await query;
+  if (error) {
+    historicoError.textContent = 'Erro ao salvar: ' + error.message;
+    historicoError.classList.add('show');
+    return;
+  }
+  historicoModal.hidden = true;
+  loadHistoricos();
 });
 
 // ---------- Util ----------

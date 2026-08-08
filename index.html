@@ -293,6 +293,31 @@
     font-size:16px; color:#eef4f2; margin-bottom:16px; letter-spacing:0.02em;
   }
 
+  /* ---------- Camada histórica ---------- */
+  .hist-list{display:flex; flex-direction:column; gap:1px; background:var(--line); border:1px solid var(--line);}
+  .hist-item{
+    background:var(--bg-0);
+    padding:22px 24px;
+    display:grid;
+    grid-template-columns:140px 1fr;
+    gap:20px;
+  }
+  @media (max-width:640px){.hist-item{grid-template-columns:1fr;}}
+  .hist-meta{}
+  .hist-era{
+    font-size:10px; text-transform:uppercase; letter-spacing:0.08em;
+    color:var(--phosphor-dim); margin-bottom:6px;
+  }
+  .hist-periodo{
+    font-family:'Oswald', sans-serif; font-weight:600; font-size:18px; color:#eef4f2;
+  }
+  .hist-local{font-size:11px; color:var(--text-faint); margin-top:4px;}
+  .hist-body h4{
+    font-family:'Oswald', sans-serif; font-weight:600; text-transform:uppercase;
+    font-size:14px; color:#eef4f2; margin-bottom:8px; letter-spacing:0.02em;
+  }
+  .hist-body p{font-size:13px; color:var(--text-dim);}
+
   /* ---------- TIMELINE ---------- */
   .timeline{position:relative; padding-left:26px; border-left:1px solid var(--line);}
   .tl-item{position:relative; padding:0 0 40px 26px;}
@@ -350,6 +375,7 @@
     <nav class="toplinks">
       <a href="#entidades">Entidades</a>
       <a href="#linha-do-tempo">Linha do tempo</a>
+      <a href="#historico">Camada histórica</a>
       <a href="#vallee">Jacques Vallée</a>
       <a href="#dimensoes">Dimensões</a>
       <a href="#sobre">Sobre o arquivo</a>
@@ -405,6 +431,20 @@
     </div>
 
     <div class="timeline" id="timeline-list">
+      <p class="empty-msg">Carregando registros...</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="historico">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-tag">Camada mais funda</span>
+      <h2 class="section-title">Relatos históricos e pré-históricos</h2>
+      <p class="section-desc">A linha do tempo acima começa em 1947, mas os relatos de fenômenos aéreos não identificados são bem mais antigos — só não usavam esse nome. Cada leitura alternativa aqui convive com uma leitura convencional (arqueológica, teológica, histórica), que também está registrada.</p>
+    </div>
+
+    <div class="hist-list" id="historicos-list">
       <p class="empty-msg">Carregando registros...</p>
     </div>
   </div>
@@ -634,6 +674,35 @@
 
   loadEntidades();
   loadCasos();
+  loadHistoricos();
+
+  async function loadHistoricos() {
+    const list = document.getElementById('historicos-list');
+    const { data, error } = await sb
+      .from('relatos_historicos')
+      .select('*')
+      .eq('publicado', true)
+      .order('ordem', { ascending: true });
+
+    if (error || !data || data.length === 0) {
+      list.innerHTML = '<p class="empty-msg">Nenhum relato publicado no momento.</p>';
+      return;
+    }
+
+    list.innerHTML = data.map(h => `
+      <div class="hist-item">
+        <div class="hist-meta">
+          <div class="hist-era">${esc(h.era)}</div>
+          <div class="hist-periodo">${esc(h.periodo || '—')}</div>
+          ${h.local ? `<div class="hist-local">${esc(h.local)}</div>` : ''}
+        </div>
+        <div class="hist-body">
+          <h4>${esc(h.titulo)}</h4>
+          <p>${esc(h.descricao || '')}</p>
+        </div>
+      </div>
+    `).join('');
+  }
 </script>
 
 </body>
