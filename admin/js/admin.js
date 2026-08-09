@@ -45,6 +45,7 @@ function showShell() {
   loadCriptideos();
   loadCasos();
   loadHistoricos();
+  loadCriptopaleo();
 }
 
 loginForm.addEventListener('submit', async (e) => {
@@ -83,7 +84,7 @@ navButtons.forEach(btn => {
   btn.addEventListener('click', () => {
     navButtons.forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-    ['entidades', 'criptideos', 'casos', 'historicos'].forEach(v => {
+    ['entidades', 'criptideos', 'casos', 'historicos', 'criptopaleo'].forEach(v => {
       document.getElementById(`view-${v}`).hidden = (v !== btn.dataset.view);
     });
   });
@@ -648,6 +649,115 @@ historicoForm.addEventListener('submit', async (e) => {
   }
   historicoModal.hidden = true;
   loadHistoricos();
+});
+
+// ===================================================================
+// CRIPTOPALEONTOLOGIA
+// ===================================================================
+
+const criptopaleoModal = document.getElementById('criptopaleoModal');
+const criptopaleoForm = document.getElementById('criptopaleoForm');
+const criptopaleoError = document.getElementById('criptopaleoError');
+
+async function loadCriptopaleo() {
+  const tbody = document.getElementById('criptopaleoTbody');
+  const { data, error } = await sb.from('criptopaleontologia').select('*').order('ordem', { ascending: true });
+
+  if (error) {
+    tbody.innerHTML = `<tr><td colspan="6" class="empty-state">Erro ao carregar: ${error.message}</td></tr>`;
+    return;
+  }
+  if (!data || data.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="6" class="empty-state">Nenhum verbete cadastrado ainda.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = data.map(c => `
+    <tr>
+      <td><strong>${escapeHtml(c.titulo)}</strong></td>
+      <td>${escapeHtml(c.categoria)}</td>
+      <td>${escapeHtml(c.periodo || '—')}</td>
+      <td><span class="badge ${c.publicado ? 'badge-on' : 'badge-off'}">${c.publicado ? 'Publicado' : 'Rascunho'}</span></td>
+      <td>${c.ordem ?? 0}</td>
+      <td>
+        <div class="row-actions">
+          <button data-id="${c.id}" class="editCriptopaleo">Editar</button>
+          <button data-id="${c.id}" class="danger deleteCriptopaleo">Excluir</button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+
+  tbody.querySelectorAll('.editCriptopaleo').forEach(b => b.addEventListener('click', () => editCriptopaleo(b.dataset.id, data)));
+  tbody.querySelectorAll('.deleteCriptopaleo').forEach(b => b.addEventListener('click', () => deleteCriptopaleo(b.dataset.id)));
+}
+
+function openCriptopaleoModal(title) {
+  document.getElementById('criptopaleoModalTitle').textContent = title;
+  criptopaleoError.classList.remove('show');
+  criptopaleoModal.hidden = false;
+}
+
+document.getElementById('newCriptopaleoBtn').addEventListener('click', () => {
+  criptopaleoForm.reset();
+  document.getElementById('criptopaleoId').value = '';
+  openCriptopaleoModal('Novo verbete');
+});
+
+document.getElementById('criptopaleoCancelBtn').addEventListener('click', () => criptopaleoModal.hidden = true);
+enableEnterToSubmit(criptopaleoForm);
+
+function editCriptopaleo(id, data) {
+  const c = data.find(x => x.id === id);
+  if (!c) return;
+  document.getElementById('criptopaleoId').value = c.id;
+  document.getElementById('criptopaleoTitulo').value = c.titulo || '';
+  document.getElementById('criptopaleoSlug').value = c.slug || '';
+  document.getElementById('criptopaleoCategoria').value = c.categoria || '';
+  document.getElementById('criptopaleoPeriodo').value = c.periodo || '';
+  document.getElementById('criptopaleoDescricao').value = c.descricao || '';
+  document.getElementById('criptopaleoConspiracao').value = c.teoria_conspiracao || '';
+  document.getElementById('criptopaleoOrdem').value = c.ordem ?? 0;
+  document.getElementById('criptopaleoPublicado').checked = !!c.publicado;
+  openCriptopaleoModal('Editar verbete');
+}
+
+async function deleteCriptopaleo(id) {
+  if (!confirm('Excluir este verbete? Essa ação não pode ser desfeita.')) return;
+  const { error } = await sb.from('criptopaleontologia').delete().eq('id', id);
+  if (error) { alert('Erro ao excluir: ' + error.message); return; }
+  loadCriptopaleo();
+}
+
+criptopaleoForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  criptopaleoError.classList.remove('show');
+
+  const id = document.getElementById('criptopaleoId').value;
+  const payload = {
+    titulo: document.getElementById('criptopaleoTitulo').value.trim(),
+    slug: document.getElementById('criptopaleoSlug').value.trim(),
+    categoria: document.getElementById('criptopaleoCategoria').value.trim(),
+    periodo: document.getElementById('criptopaleoPeriodo').value.trim() || null,
+    descricao: document.getElementById('criptopaleoDescricao').value.trim() || null,
+    teoria_conspiracao: document.getElementById('criptopaleoConspiracao').value.trim() || null,
+    ordem: parseInt(document.getElementById('criptopaleoOrdem').value, 10) || 0,
+    publicado: document.getElementById('criptopaleoPublicado').checked,
+    atualizado_em: new Date().toISOString()
+  };
+
+  const query = id
+    ? sb.from('criptopaleontologia').update(payload).eq('id', id)
+    : sb.from('criptopaleontologia').insert(payload);
+
+  const { error } = await query;
+  if (error) {
+    criptopaleoError.textContent = 'Erro ao salvar: ' + error.message;
+    criptopaleoError.classList.add('show');
+    return;
+  }
+  criptopaleoModal.hidden = true;
+  loadCriptopaleo();
 });
 
 // ---------- Util ----------

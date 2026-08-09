@@ -46,6 +46,7 @@
       <button data-view="criptideos">Criptídeos</button>
       <button data-view="casos">Linha do tempo</button>
       <button data-view="historicos">Camada histórica</button>
+      <button data-view="criptopaleo">Criptopaleontologia</button>
     </nav>
     <button class="admin-logout" id="logoutBtn">Sair</button>
   </aside>
@@ -161,6 +162,36 @@
           </tbody>
         </table>
       </div>
+    </section>
+
+    <!-- ---------- View: Criptopaleontologia ---------- -->
+    <section id="view-criptopaleo" hidden>
+      <div class="admin-header">
+        <div>
+          <h2>Criptopaleontologia</h2>
+          <p>Teorias marginais sobre fósseis e paleontologia. Publicados aparecem na seção "Criptopaleontologia" do site.</p>
+        </div>
+        <button class="btn btn-primary" id="newCriptopaleoBtn">+ Novo verbete</button>
+      </div>
+      <div class="admin-table-wrap">
+        <table class="admin-table" id="criptopaleoTable">
+          <thead>
+            <tr>
+              <th>Título</th>
+              <th>Categoria</th>
+              <th>Período</th>
+              <th>Status</th>
+              <th>Ordem</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="criptopaleoTbody">
+            <tr><td colspan="6" class="empty-state">Carregando...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
     </section>
 
   </main>
@@ -333,6 +364,53 @@
       <p class="form-error" id="historicoError">Erro ao salvar. Confira o slug (precisa ser único).</p>
       <div class="modal-actions">
         <button type="button" class="btn btn-ghost" id="historicoCancelBtn">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Salvar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ---------- Modal: editar/criar verbete de criptopaleontologia ---------- -->
+<div class="admin-modal-backdrop" id="criptopaleoModal" hidden>
+  <div class="admin-modal">
+    <h3 id="criptopaleoModalTitle">Novo verbete</h3>
+    <form id="criptopaleoForm">
+      <input type="hidden" id="criptopaleoId">
+      <div class="field">
+        <label for="criptopaleoTitulo">Título</label>
+        <input type="text" id="criptopaleoTitulo" required placeholder="ex: A conspiração do Smithsonian">
+      </div>
+      <div class="field">
+        <label for="criptopaleoSlug">Slug (URL)</label>
+        <input type="text" id="criptopaleoSlug" required placeholder="ex: conspiracao-smithsonian">
+      </div>
+      <div class="field">
+        <label for="criptopaleoCategoria">Categoria</label>
+        <input type="text" id="criptopaleoCategoria" required placeholder="ex: Ciência real distorcida, Fraude documentada, Movimento organizado, Conspiração...">
+      </div>
+      <div class="field">
+        <label for="criptopaleoPeriodo">Período</label>
+        <input type="text" id="criptopaleoPeriodo" placeholder="ex: 1912–1953, Movimento moderno...">
+      </div>
+      <div class="field">
+        <label for="criptopaleoDescricao">Descrição</label>
+        <textarea id="criptopaleoDescricao" style="min-height:140px;" placeholder="A ciência estabelecida e a distorção que ela sofreu."></textarea>
+      </div>
+      <div class="field">
+        <label for="criptopaleoConspiracao">Teoria da conspiração (opcional)</label>
+        <textarea id="criptopaleoConspiracao" style="min-height:120px;" placeholder="Só preencha se existir uma teoria de encobrimento/supressão documentada. Deixe em branco se não houver."></textarea>
+      </div>
+      <div class="field">
+        <label for="criptopaleoOrdem">Ordem</label>
+        <input type="number" id="criptopaleoOrdem" value="0">
+      </div>
+      <div class="field checkbox-row">
+        <input type="checkbox" id="criptopaleoPublicado">
+        <label for="criptopaleoPublicado" style="margin:0;">Publicado</label>
+      </div>
+      <p class="form-error" id="criptopaleoError">Erro ao salvar. Confira o slug (precisa ser único).</p>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" id="criptopaleoCancelBtn">Cancelar</button>
         <button type="submit" class="btn btn-primary">Salvar</button>
       </div>
     </form>

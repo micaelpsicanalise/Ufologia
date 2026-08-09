@@ -258,6 +258,45 @@
   }
   .porosity-close p{margin-top:14px;}
 
+  /* ---------- Catálogo de teorias ---------- */
+  .theory-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+    gap:16px;
+  }
+  .theory-card{
+    background:var(--bg-1);
+    border:1px solid var(--line);
+    border-left:3px solid var(--line);
+    padding:20px 22px;
+    text-decoration:none;
+    color:inherit;
+    display:block;
+    transition:border-color 0.2s ease, transform 0.2s ease;
+  }
+  .theory-card:hover{transform:translateY(-2px);}
+  .theory-card.cat-mal_entendido{border-left-color:var(--text-faint);}
+  .theory-card.cat-ciencia_distorcida{border-left-color:var(--phosphor);}
+  .theory-card.cat-geomitologia{border-left-color:var(--amber);}
+  .theory-card.cat-fraude{border-left-color:var(--amber);}
+  .theory-card.cat-movimento{border-left-color:var(--amber);}
+  .theory-card.cat-conspiracao{border-left-color:var(--stamp);}
+  .theory-badge{
+    display:inline-block; font-size:9px; letter-spacing:0.08em; text-transform:uppercase;
+    padding:3px 9px; margin-bottom:12px; border-radius:2px;
+  }
+  .theory-badge.cat-mal_entendido{background:var(--bg-2); color:var(--text-faint);}
+  .theory-badge.cat-ciencia_distorcida{background:rgba(79,227,168,0.12); color:var(--phosphor);}
+  .theory-badge.cat-geomitologia{background:rgba(226,162,59,0.14); color:var(--amber);}
+  .theory-badge.cat-fraude{background:rgba(226,162,59,0.14); color:var(--amber);}
+  .theory-badge.cat-movimento{background:rgba(226,162,59,0.14); color:var(--amber);}
+  .theory-badge.cat-conspiracao{background:rgba(193,68,58,0.16); color:var(--stamp);}
+  .theory-card h4{
+    font-family:'Oswald', sans-serif; font-weight:600; text-transform:uppercase;
+    font-size:15px; color:#eef4f2; margin-bottom:8px; letter-spacing:0.02em;
+  }
+  .theory-card p{font-size:12.5px; color:var(--text-dim); margin-bottom:10px;}
+  .theory-status{font-size:10.5px; color:var(--text-faint); font-style:italic;}
   /* ---------- Perfil: Jacques Vallée ---------- */
   .profile-grid{
     display:grid;
@@ -389,6 +428,7 @@
       <a href="#criptideos">Criptídeos</a>
       <a href="#linha-do-tempo">Linha do tempo</a>
       <a href="#historico">Camada histórica</a>
+      <a href="#criptopaleontologia">Criptopaleontologia</a>
       <a href="#vallee">Jacques Vallée</a>
       <a href="#dimensoes">Dimensões</a>
       <a href="#sobre">Sobre o arquivo</a>
@@ -472,6 +512,20 @@
     </div>
 
     <div class="hist-list" id="historicos-list">
+      <p class="empty-msg">Carregando registros...</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="criptopaleontologia">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-tag">O iceberg da paleontologia marginal</span>
+      <h2 class="section-title">Criptopaleontologia</h2>
+      <p class="section-desc">Fósseis são objetos ambíguos o bastante — pedra, forma, tempo profundo — pra que qualquer um projete neles a história que precisa que seja verdade. Cada verbete aqui separa a ciência estabelecida da distorção que ela sofreu, e destaca em vermelho os casos que viraram teoria de encobrimento institucional de verdade.</p>
+    </div>
+
+    <div class="theory-grid" id="criptopaleo-list">
       <p class="empty-msg">Carregando registros...</p>
     </div>
   </div>
@@ -728,6 +782,41 @@
   loadCriptideos();
   loadCasos();
   loadHistoricos();
+  loadCriptopaleo();
+
+  const CATEGORIA_CLASS = {
+    'Ciência real distorcida': 'cat-ciencia_distorcida',
+    'Geomitologia': 'cat-geomitologia',
+    'Fraude documentada': 'cat-fraude',
+    'Movimento organizado': 'cat-movimento',
+    'Conspiração': 'cat-conspiracao'
+  };
+
+  async function loadCriptopaleo() {
+    const grid = document.getElementById('criptopaleo-list');
+    const { data, error } = await sb
+      .from('criptopaleontologia')
+      .select('*')
+      .eq('publicado', true)
+      .order('ordem', { ascending: true });
+
+    if (error || !data || data.length === 0) {
+      grid.innerHTML = '<p class="empty-msg">Nenhum registro publicado no momento.</p>';
+      return;
+    }
+
+    grid.innerHTML = data.map(c => {
+      const catClass = CATEGORIA_CLASS[c.categoria] || 'cat-ciencia_distorcida';
+      return `
+      <a class="theory-card ${catClass}" href="teoria.html?slug=${encodeURIComponent(c.slug)}">
+        <span class="theory-badge ${catClass}">${esc(c.categoria)}</span>
+        <h4>${esc(c.titulo)}</h4>
+        <p>${esc((c.descricao || '').slice(0, 160))}${(c.descricao || '').length > 160 ? '…' : ''}</p>
+        ${c.periodo ? `<div class="theory-status">${esc(c.periodo)}</div>` : ''}
+      </a>
+    `;
+    }).join('');
+  }
 
   async function loadCriptideos() {
     const grid = document.getElementById('criptideos-grid');
