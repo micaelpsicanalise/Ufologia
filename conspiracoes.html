@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conspirações — ARQUIVO X-BR</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-0:#080b0f; --bg-1:#0d1218; --bg-2:#121820;
+    --line:#233040; --line-soft:#1a232d;
+    --phosphor:#4fe3a8; --phosphor-dim:#2c8a67;
+    --amber:#e2a23b; --stamp:#c1443a; --stamp-dim:#7a2c26;
+    --text:#d6e2df; --text-dim:#8296a0; --text-faint:#4c5a63;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg-0); color:var(--text); font-family:'IBM Plex Mono', monospace; line-height:1.6; min-height:100vh;}
+  ::selection{background:var(--stamp); color:#1a0503;}
+  body::before{
+    content:""; position:fixed; inset:0;
+    background:repeating-linear-gradient(to bottom, rgba(255,255,255,0.018) 0px, rgba(255,255,255,0.018) 1px, transparent 1px, transparent 3px);
+    pointer-events:none; z-index:9999; mix-blend-mode:overlay;
+  }
+  body::after{
+    content:""; position:fixed; inset:0;
+    background:radial-gradient(ellipse at 50% 0%, rgba(193,68,58,0.07), transparent 60%);
+    pointer-events:none; z-index:1;
+  }
+  .wrap{max-width:900px; margin:0 auto; padding:0 28px; position:relative; z-index:2;}
+
+  header.topbar{position:sticky; top:0; z-index:100; background:rgba(8,11,15,0.92); backdrop-filter:blur(6px); border-bottom:1px solid var(--stamp-dim);}
+  .topbar-inner{max-width:900px; margin:0 auto; padding:14px 28px; display:flex; align-items:center; justify-content:space-between;}
+  .brand{font-family:'Oswald', sans-serif; font-weight:700; letter-spacing:0.14em; font-size:15px; color:var(--stamp); display:flex; align-items:center; gap:10px; text-decoration:none;}
+  .brand .dot{width:7px; height:7px; border-radius:50%; background:var(--stamp); box-shadow:0 0 8px var(--stamp); animation:blink 2.4s infinite;}
+  @keyframes blink{0%,100%{opacity:1;}50%{opacity:0.25;}}
+  .back-link{color:var(--text-dim); text-decoration:none; font-size:11px; text-transform:uppercase; letter-spacing:0.06em;}
+  .back-link:hover{color:var(--stamp);}
+
+  .hero{padding:60px 0 40px; border-bottom:1px solid var(--stamp-dim);}
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:11px; letter-spacing:0.16em; text-transform:uppercase;
+    color:var(--stamp); border:1px solid rgba(193,68,58,0.4);
+    padding:5px 12px; margin-bottom:22px;
+  }
+  h1.title{
+    font-family:'Oswald', sans-serif; font-weight:700;
+    font-size:clamp(32px, 5.5vw, 54px); text-transform:uppercase; line-height:1.02; color:#eef4f2;
+  }
+  h1.title span{color:var(--stamp);}
+  .hero p{color:var(--text-dim); max-width:600px; margin-top:20px; font-size:14px;}
+  .hero-count{margin-top:28px; font-size:12px; color:var(--text-faint); text-transform:uppercase; letter-spacing:0.06em;}
+  .hero-count b{color:var(--stamp); font-family:'Oswald',sans-serif; font-size:20px; letter-spacing:0; margin-right:6px;}
+
+  .filters{display:flex; gap:10px; flex-wrap:wrap; padding:28px 0; border-bottom:1px solid var(--line-soft);}
+  .filter-btn{
+    background:transparent; border:1px solid var(--line); color:var(--text-dim);
+    font-family:'IBM Plex Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.05em;
+    padding:7px 14px; cursor:pointer;
+  }
+  .filter-btn:hover{border-color:var(--stamp-dim); color:var(--text);}
+  .filter-btn.active{background:var(--stamp); border-color:var(--stamp); color:#1a0503; font-weight:700;}
+
+  .dossie-list{display:flex; flex-direction:column; gap:1px; background:var(--line); border:1px solid var(--line); margin:32px 0 60px;}
+  .dossie-item{background:var(--bg-1); padding:26px 28px; text-decoration:none; display:block; color:inherit; border-left:3px solid var(--stamp); transition:background 0.15s ease;}
+  .dossie-item:hover{background:var(--bg-2);}
+  .dossie-head{display:flex; align-items:center; gap:12px; margin-bottom:14px; flex-wrap:wrap;}
+  .dossie-source{
+    font-size:9px; letter-spacing:0.1em; text-transform:uppercase;
+    color:var(--stamp); background:rgba(193,68,58,0.14);
+    padding:3px 9px;
+  }
+  .dossie-title{font-family:'Oswald',sans-serif; font-weight:600; text-transform:uppercase; font-size:17px; color:#eef4f2; letter-spacing:0.02em;}
+  .dossie-context{font-size:12.5px; color:var(--text-faint); margin-bottom:14px; max-width:680px;}
+  .dossie-conspiracy{font-size:13.5px; color:var(--text-dim); font-style:italic; max-width:680px;}
+  .dossie-open{font-size:10px; color:var(--stamp); text-transform:uppercase; letter-spacing:0.06em; margin-top:14px;}
+
+  .empty-msg{color:var(--text-faint); font-size:14px; padding:60px 0; text-align:center;}
+  footer{border-top:1px solid var(--line-soft); padding:32px 0 50px; font-size:11px; color:var(--text-faint);}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="brand"><span class="dot"></span>ARQUIVO X-BR</a>
+    <a href="index.html" class="back-link">← Voltar ao índice</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="eyebrow">● Cofre reunido</div>
+    <h1 class="title">Todas as <span>conspirações</span><br>num só lugar</h1>
+    <p>Cada categoria do site — entidades, criptídeos, casos, camada histórica, criptopaleontologia — pode ter uma teoria de encobrimento anexada quando ela existe de verdade e é documentável. Esta página reúne todas elas, de todas as categorias, num único cofre.</p>
+    <div class="hero-count" id="heroCount"><b>—</b>registros carregando...</div>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="filters" id="filters" hidden>
+    <button class="filter-btn active" data-filter="todos">Todos</button>
+  </div>
+
+  <div class="dossie-list" id="dossie-list">
+    <p class="empty-msg">Reunindo os registros...</p>
+  </div>
+</div>
+
+<footer><div class="wrap">Compilação não oficial · teorias de conspiração aqui listadas variam de bem documentadas a puramente especulativas — cada ficha indica a categoria de origem pra você julgar pelo contexto.</div></footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = 'https://aewcxqzpbipwcdpsjfht.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_mINpOQLVbi0pilHc9bEtBA_l1a0o6c6';
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { db: { schema: 'ufologia' } });
+
+  function esc(str) {
+    if (str == null) return '';
+    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  // fonte: label exibido, tabela, campo de título, campo de contexto, como montar o link
+  const SOURCES = [
+    { key: 'entidades',       label: 'Entidade',          table: 'entidades',           titleField: 'nome',   ctxField: 'apelido',  link: r => `entidade.html?slug=${encodeURIComponent(r.slug)}` },
+    { key: 'criptideos',      label: 'Criptídeo',         table: 'criptideos',          titleField: 'nome',   ctxField: 'apelido',  link: r => `entidade.html?tipo=criptideo&slug=${encodeURIComponent(r.slug)}` },
+    { key: 'casos',           label: 'Caso moderno',      table: 'casos',               titleField: 'titulo', ctxField: 'ano',      link: () => `index.html#linha-do-tempo` },
+    { key: 'historicos',      label: 'Camada histórica',  table: 'relatos_historicos',  titleField: 'titulo', ctxField: 'periodo',  link: () => `index.html#historico` },
+    { key: 'criptopaleo',     label: 'Criptopaleontologia', table: 'criptopaleontologia', titleField: 'titulo', ctxField: 'periodo', link: r => `teoria.html?slug=${encodeURIComponent(r.slug)}` }
+  ];
+
+  let ALL_ITEMS = [];
+
+  async function loadAll() {
+    const results = await Promise.all(SOURCES.map(src =>
+      sb.from(src.table).select('*').eq('publicado', true).not('teoria_conspiracao', 'is', null)
+    ));
+
+    ALL_ITEMS = [];
+    results.forEach((res, i) => {
+      const src = SOURCES[i];
+      if (res.error || !res.data) return;
+      res.data.forEach(row => {
+        ALL_ITEMS.push({
+          sourceKey: src.key,
+          sourceLabel: src.label,
+          title: row[src.titleField],
+          context: row[src.ctxField],
+          conspiracy: row.teoria_conspiracao,
+          href: src.link(row)
+        });
+      });
+    });
+
+    renderCount();
+    renderFilters();
+    render('todos');
+  }
+
+  function renderCount() {
+    document.getElementById('heroCount').innerHTML =
+      `<b>${ALL_ITEMS.length}</b>registro${ALL_ITEMS.length === 1 ? '' : 's'} com teoria de conspiração documentada`;
+  }
+
+  function renderFilters() {
+    const present = [...new Set(ALL_ITEMS.map(i => i.sourceKey))];
+    if (present.length <= 1) return;
+    const box = document.getElementById('filters');
+    box.hidden = false;
+    const extra = present.map(key => {
+      const src = SOURCES.find(s => s.key === key);
+      const count = ALL_ITEMS.filter(i => i.sourceKey === key).length;
+      return `<button class="filter-btn" data-filter="${key}">${esc(src.label)} (${count})</button>`;
+    }).join('');
+    box.insertAdjacentHTML('beforeend', extra);
+    box.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        box.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        render(btn.dataset.filter);
+      });
+    });
+  }
+
+  function render(filter) {
+    const list = document.getElementById('dossie-list');
+    const items = filter === 'todos' ? ALL_ITEMS : ALL_ITEMS.filter(i => i.sourceKey === filter);
+
+    if (items.length === 0) {
+      list.innerHTML = '<p class="empty-msg">Nenhum registro com teoria de conspiração ainda.</p>';
+      return;
+    }
+
+    list.innerHTML = items.map(i => `
+      <a class="dossie-item" href="${i.href}">
+        <div class="dossie-head">
+          <span class="dossie-source">${esc(i.sourceLabel)}</span>
+        </div>
+        <div class="dossie-title">${esc(i.title)}</div>
+        ${i.context ? `<div class="dossie-context">${esc(i.context)}</div>` : ''}
+        <p class="dossie-conspiracy">${esc(i.conspiracy)}</p>
+        <div class="dossie-open">Abrir ficha completa →</div>
+      </a>
+    `).join('');
+  }
+
+  loadAll();
+</script>
+
+</body>
+</html>
