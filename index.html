@@ -93,6 +93,34 @@
   nav.toplinks a:hover{color:var(--phosphor);}
   @media (max-width:720px){nav.toplinks{display:none;}}
 
+  /* ---------- Menu dropdown (Índice) ---------- */
+  details.nav-menu{position:relative;}
+  details.nav-menu summary{
+    list-style:none; cursor:pointer;
+    display:flex; align-items:center; gap:8px;
+    font-size:11px; letter-spacing:0.08em; text-transform:uppercase;
+    color:var(--text-dim); border:1px solid var(--line);
+    padding:8px 14px;
+  }
+  details.nav-menu summary::-webkit-details-marker{display:none;}
+  details.nav-menu summary:hover{color:var(--phosphor); border-color:var(--phosphor-dim);}
+  details.nav-menu summary .chevron{transition:transform 0.15s ease; font-size:9px;}
+  details.nav-menu[open] summary .chevron{transform:rotate(180deg);}
+  details.nav-menu[open] summary{color:var(--phosphor); border-color:var(--phosphor-dim);}
+  .nav-menu-panel{
+    position:absolute; top:calc(100% + 8px); right:0;
+    background:var(--bg-1); border:1px solid var(--line);
+    min-width:220px; z-index:200;
+    padding:6px;
+  }
+  .nav-menu-panel a{
+    display:block; padding:10px 12px;
+    font-size:12px; letter-spacing:0.04em; text-transform:uppercase;
+    color:var(--text-dim); text-decoration:none;
+  }
+  .nav-menu-panel a:hover{background:var(--bg-2); color:var(--phosphor);}
+  .nav-menu-divider{height:1px; background:var(--line-soft); margin:6px 4px;}
+
   /* ---------- HERO ---------- */
   .hero{
     position:relative;
@@ -423,16 +451,22 @@
 <header class="topbar">
   <div class="topbar-inner">
     <div class="brand"><span class="dot"></span>ARQUIVO X-BR</div>
-    <nav class="toplinks">
-      <a href="#entidades">Entidades</a>
-      <a href="#criptideos">Criptídeos</a>
-      <a href="#linha-do-tempo">Linha do tempo</a>
-      <a href="#historico">Camada histórica</a>
-      <a href="#criptopaleontologia">Criptopaleontologia</a>
-      <a href="#vallee">Jacques Vallée</a>
-      <a href="#dimensoes">Dimensões</a>
-      <a href="#sobre">Sobre o arquivo</a>
-    </nav>
+    <details class="nav-menu">
+      <summary>Índice <span class="chevron">▾</span></summary>
+      <div class="nav-menu-panel">
+        <a href="#entidades">Entidades</a>
+        <a href="#criptideos">Criptídeos</a>
+        <a href="#criptopaleontologia">Criptopaleontologia</a>
+        <div class="nav-menu-divider"></div>
+        <a href="#linha-do-tempo">Linha do tempo</a>
+        <a href="#historico">Camada histórica</a>
+        <div class="nav-menu-divider"></div>
+        <a href="#vallee">Jacques Vallée</a>
+        <a href="#dimensoes">Dimensões</a>
+        <div class="nav-menu-divider"></div>
+        <a href="#sobre">Sobre o arquivo</a>
+      </div>
+    </details>
   </div>
 </header>
 
@@ -489,6 +523,20 @@
   </div>
 </section>
 
+<section class="section" id="criptopaleontologia">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-tag">O iceberg da paleontologia marginal</span>
+      <h2 class="section-title">Criptopaleontologia</h2>
+      <p class="section-desc">Fósseis são objetos ambíguos o bastante — pedra, forma, tempo profundo — pra que qualquer um projete neles a história que precisa que seja verdade. Cada verbete aqui separa a ciência estabelecida da distorção que ela sofreu, e destaca em vermelho os casos que viraram teoria de encobrimento institucional de verdade.</p>
+    </div>
+
+    <div class="theory-grid" id="criptopaleo-list">
+      <p class="empty-msg">Carregando registros...</p>
+    </div>
+  </div>
+</section>
+
 <section class="section" id="linha-do-tempo">
   <div class="wrap">
     <div class="section-head">
@@ -512,20 +560,6 @@
     </div>
 
     <div class="hist-list" id="historicos-list">
-      <p class="empty-msg">Carregando registros...</p>
-    </div>
-  </div>
-</section>
-
-<section class="section" id="criptopaleontologia">
-  <div class="wrap">
-    <div class="section-head">
-      <span class="section-tag">O iceberg da paleontologia marginal</span>
-      <h2 class="section-title">Criptopaleontologia</h2>
-      <p class="section-desc">Fósseis são objetos ambíguos o bastante — pedra, forma, tempo profundo — pra que qualquer um projete neles a história que precisa que seja verdade. Cada verbete aqui separa a ciência estabelecida da distorção que ela sofreu, e destaca em vermelho os casos que viraram teoria de encobrimento institucional de verdade.</p>
-    </div>
-
-    <div class="theory-grid" id="criptopaleo-list">
       <p class="empty-msg">Carregando registros...</p>
     </div>
   </div>
@@ -777,6 +811,13 @@
       </div>
     `).join('');
   }
+
+  // fecha o menu dropdown ao clicar num link
+  document.querySelectorAll('.nav-menu-panel a').forEach(a => {
+    a.addEventListener('click', () => {
+      document.querySelector('details.nav-menu').removeAttribute('open');
+    });
+  });
 
   loadEntidades();
   loadCriptideos();
