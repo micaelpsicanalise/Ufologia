@@ -1,0 +1,18 @@
+-- ===================================================================
+-- ARQUIVO X-BR — Os Jinn (Xen) e a "hipótese do Jinn"
+-- Rode isto no SQL Editor do Supabase (depois do seed-arcontes.sql).
+-- ===================================================================
+
+update ufologia.relatos_historicos set ordem = ordem + 1
+  where slug in ('candelabro-de-paracas', 'linhas-de-nazca', 'fenomeno-nuremberg',
+                  'esferas-basileia', 'milagre-do-sol-fatima', 'comando-ashtar');
+
+insert into ufologia.relatos_historicos
+  (era, titulo, slug, periodo, local, descricao, teoria_conspiracao, ordem, publicado)
+values
+  ('Antiguidade tardia', 'Os Jinn: vizinhos invisíveis', 'jinn-vizinhos-invisiveis',
+   'Crença pré-islâmica atestada; codificada no Alcorão a partir do séc. VII d.C.',
+   'Península Arábica; hoje global, com maior concentração no mundo muçulmano',
+   'A palavra árabe "jinn" vem da raiz jnn, que significa "esconder" ou "ocultar" — a mesma raiz de palavras como majnun (louco, possuído) e janna (jardim, paraíso, um espaço fechado e protegido). O historiador alemão Julius Wellhausen documentou que, na Arábia pré-islâmica, os jinn já eram temidos e cultuados como habitantes de lugares desertos e ermos, associados a doenças e distúrbios mentais que acometiam viajantes isolados. Com a chegada do Islã, os jinn não foram descartados como superstição — foram formalmente incorporados à cosmologia: o Alcorão os menciona 29 vezes, descrevendo-os como criados "de um fogo sem fumaça" (Surata Al-Hijr 15:27; Ar-Rahman 55:15), antes da criação dos humanos, dotados do mesmo livre-arbítrio e sujeitos ao mesmo julgamento divino (Surata Adh-Dhariyat 51:56-57). A Surata 72 do Alcorão é inteiramente dedicada a um grupo de jinn que ouviu Maomé recitando e se converteu. A doutrina da possessão por jinn — a condição chamada da''ifa, um estado de fragilidade emocional que abriria a porta pra invasão — é afirmada pela maioria dos estudiosos sunitas, incluindo figuras influentes como Ibn Taymiyya. Um estudo de 2014 de pesquisadores afiliados a Cambridge e Harvard (Jalal, Simons-Rudolph, Jalal e Hinton, publicado na revista Transcultural Psychiatry) encontrou que quase metade dos egípcios que já sofreram paralisia do sono atribuem a experiência a um "ataque de jinn" — uma correlação estatisticamente robusta entre um fenômeno neurológico bem compreendido e uma explicação cultural específica. Uma pesquisa Pew de 2012 encontrou crença nos jinn em 86% da população de Marrocos, 84% em Bangladesh e 77% no Paquistão — entre as convicções sobrenaturais mais amplamente sustentadas do planeta em número absoluto de pessoas.',
+   'Autores muçulmanos contemporâneos propõem a "hipótese do jinn": a ideia de que parte dos avistamentos de OVNIs e relatos de abdução alienígena seriam, na verdade, atividade de jinn, não visitação extraterrestre — apontando a descrição alcorânica de seres capazes de voo, metamorfose e tentativas de espionar os céus (Surata Al-Jinn). A semelhança estrutural com a hipótese interdimensional secular (a mesma defendida por Jacques Vallée) é notável, mas vale reforçar: a maior parte da estudiosidade islâmica tradicional afirma a existência dos jinn conforme descrita no Alcorão sem estender essa afirmação ao território ufológico — é uma reinterpretação moderna, não doutrina clássica. Já a camada mais fraca dessa teoria — alegações virais de que o acelerador de partículas do CERN abriria um "portal" que estaria libertando ou se comunicando com entidades demoníacas/jinn — foi checada e desmentida repetidamente por agências como Reuters, USA Today e Snopes, e rastreada a uma performance teatral encenada perto da instalação, mal-interpretada online como ritual real.',
+   5, true);
